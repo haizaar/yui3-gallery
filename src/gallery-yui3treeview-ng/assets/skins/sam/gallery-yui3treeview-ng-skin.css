@@ -1,4 +1,7 @@
 
+.yui3-skin-sam .yui3-treeview li {
+	margin: 0;
+}
 .yui3-skin-sam .yui3-treeview {
 	font-size: 13px;
 	font-family: arial;
@@ -27,7 +30,7 @@
 }
 
 .yui3-skin-sam .yui3-treeview .yui3-treenode-content {
-    padding-left: 21px;
+    padding-left: 22px;
 }
 
 .yui3-skin-sam .yui3-treeview .yui3-treenode .yui3-treenode-label-content {
@@ -56,6 +59,6 @@
 }
 
 .yui3-skin-sam .yui3-treeview .yui3-treenode.yui3-treenode-leaf .yui3-treenode-label {
-	padding-left: 21px;
+	padding-left: 22px;
 }
 

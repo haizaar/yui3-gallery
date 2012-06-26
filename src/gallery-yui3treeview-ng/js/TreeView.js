@@ -1,9 +1,7 @@
-	
+
 var getClassName = Y.ClassNameManager.getClassName,
-		CONTENT_BOX = "contentBox",
 		BOUNDING_BOX = "boundingBox",
 		TREENODE = "treenode",
-		CHECKBOXTREENODE = "checkboxtreenode",
 		classNames = {
 			tree : getClassName(TREENODE),
 			content : getClassName(TREENODE, "content"),
@@ -12,20 +10,28 @@ var getClassName = Y.ClassNameManager.getClassName,
 			toggle : getClassName(TREENODE, "toggle-control"),
 			collapsed : getClassName(TREENODE, "collapsed"),
 			leaf : getClassName(TREENODE, "leaf"),
-			checkbox : getClassName(CHECKBOXTREENODE, "checkbox"), //FIXME: should be in plugin
 			lastnode : getClassName(TREENODE, "last")
         },
-		//FIXME: should be in plugin
-		checkStates = { // Check states for checkbox tree
-			unchecked: 10,
-			halfchecked: 20,
-			checked: 30
-		},
-		checkStatesClasses = {
-			10 : getClassName(CHECKBOXTREENODE, "checkbox-unchecked"),
-			20 : getClassName(CHECKBOXTREENODE, "checkbox-halfchecked"),
-			30 : getClassName(CHECKBOXTREENODE, "checkbox-checked")
-		};
+		findChildren;
+
+/*
+ * Used in HTML_PARSERs to find children of the current widget
+ */
+findChildren = function (srcNode, selector) {
+		var descendants = srcNode.all(selector),
+			children = Array(),
+			child;
+			
+			descendants.each(function(node) {
+				child = {
+					srcNode : node,
+					boundingBox : node,
+					contentBox : node.one("> ul")
+				};
+				children.push(child);
+			});
+			return children;
+};
 
 /**
  * TreeView widget. Provides a tree style widget, with a hierachical representation of it's components.
@@ -97,7 +103,7 @@ var getClassName = Y.ClassNameManager.getClassName,
 		},
 
         bindUI : function() {
-            var boundingBox;
+            var boundingBox, parent;
 			boundingBox = this.get(BOUNDING_BOX);
 			boundingBox.on("click", this.onClickEvents, this);
 
@@ -107,6 +113,20 @@ var getClassName = Y.ClassNameManager.getClassName,
 					this.fire("nodeclick", {treenode: twidget});
 				}
 			}, this), "."+classNames.label);
+			
+			this.after("addChild", function(e) {
+				parent = e.child.get("parent");
+				if (e.child.get("isLast")) {
+					parent.item(e.index-1)._unmarkLast();
+				}
+			});
+			
+			this.on("removeChild", function(e) {
+				parent = e.child.get("parent");
+				if (e.child.get("isLast")) {
+					parent.item(e.index-1)._markLast();
+				}
+			});
 		},
 		
         /**
@@ -190,12 +210,18 @@ var getClassName = Y.ClassNameManager.getClassName,
 			 * @attribute loadOnDemand
 			 * @type boolean
 			 *
-			 * @description Whether children of this node can be laoded on demand.
-			 * Use with gallery-yui3treeview-datasource.
+			 * @description Whether children of this node can be loaded on demand
+			 * (when this tree node is expanded, for example).
+			 * Use with gallery-yui3treeview-datasource-ng.
 			 */
-			loadOnDemand : { //FIXME: Should be in datasource plugin
+			loadOnDemand : {
 				value: false,
 				validator: Y.Lang.isBoolean
+			}
+		},
+		HTML_PARSER : {
+			children : function (srcNode) {
+				return findChildren(srcNode, "> li");
 			}
 		}
 	});
@@ -236,37 +262,37 @@ var getClassName = Y.ClassNameManager.getClassName,
 			var boundingBox = this.get(BOUNDING_BOX),
                 treeLabel,
 				treeLabelHTML,
+				labelContent,
 				labelContentHTML,
 				toggleControlHTML,
 				label;
-                
-				//We get the anchor to retrieve the label, we add the classname
-				if (this._renderFromMarkup) { //FIXME: Implement rendering from markup
-					// labelContainer = boundingBox.one(":first-child");
-					// labelContainer.set("role","treeitem");
-					// labelContainer.addClass(treelabelClassName);
-					// label = labelContainer.get(INNERHTML);
-					// toggleControlHtml = Y.substitute(this.EXPANDCONTROL_TEMPLATE,{labelcontentClassName:classNames.labelcontent, label : label});
-					// labelContainer.set(INNERHTML,toggleControlHtml);
-					// this.set("label",label);
-					// this._renderFromMarkup = FALSE;
-				} else {
-					label = this.get("label");
+				
+			toggleControlHTML = Y.substitute(this.TOGGLECONTROL_TEMPLATE,{toggleClassName: classNames.toggle});
+			
+			if (this._renderFromMarkup) {
+				treeLabel = boundingBox.one(":first-child");
+				treeLabel.set("role", "treeitem");
+				treeLabel.addClass(classNames.label);
+				labelContent = treeLabel.removeChild(treeLabel.one(":first-child"));
+				labelContent.addClass(classNames.labelContent);
+			} else {
+				label = this.get("label");
 
-					treeLabelHTML = Y.substitute(this.TREENODELABEL_TEMPLATE, {labelClassName: classNames.label});
-					labelContentHTML = Y.substitute(this.TREENODELABELCONTENT_TEMPLATE, {labelContentClassName: classNames.labelContent, label: label});
-					toggleControlHTML = Y.substitute(this.TOGGLECONTROL_TEMPLATE,{toggleClassName: classNames.toggle});
+				treeLabelHTML = Y.substitute(this.TREENODELABEL_TEMPLATE, {labelClassName: classNames.label});
+				labelContentHTML = Y.substitute(this.TREENODELABELCONTENT_TEMPLATE, {labelContentClassName: classNames.labelContent, label: label});
+				labelContent = labelContentHTML;
+				
+				treeLabel = Y.Node.create(treeLabelHTML);
+				boundingBox.prepend(treeLabel);
+			}
 
-					treeLabel = Y.Node.create(treeLabelHTML);
-					if (!this.get("isLeaf")) {
-						treeLabel.appendChild(toggleControlHTML).appendChild(labelContentHTML);
-					} else {
-						treeLabel.append(labelContentHTML);
-					}
+			if (!this.get("isLeaf")) {
+				treeLabel.appendChild(toggleControlHTML).appendChild(labelContent);
+			} else {
+				treeLabel.append(labelContent);
+			}
 
-					boundingBox.prepend(treeLabel);
-				}
-				boundingBox.set("role","presentation");
+			boundingBox.set("role","presentation");
 
 			if (!this.get("isLeaf")) {
 				if (this.get("root").get("startCollapsed")) {
@@ -282,15 +308,29 @@ var getClassName = Y.ClassNameManager.getClassName,
 				boundingBox.addClass(classNames.leaf);
 			}
 			
-			if (this.get("index") + 1 == this.get("parent").size()) {
-				boundingBox.addClass(classNames.lastnode);
+			if (this.get("isLast")) {
+				this._markLast();
 			}
-			// FIXME
-			// if (items.length === 1 && (items[0] instanceof Y.TreeNode)) {
-			//   items[0].get(BOUNDING_BOX).addClass("yui3-singletree"); 
-			// }
 		},
 
+		/**
+		 * Marks this node as the last one in list
+		 * @method _markLast
+		 * @protected
+		 */
+		_markLast : function() {
+			this.get(BOUNDING_BOX).addClass(classNames.lastnode);
+		},
+
+		/**
+		 * Unmarks this node as the last one in list
+		 * @method _markLast
+		 * @protected
+		 */
+		_unmarkLast : function() {
+			this.get(BOUNDING_BOX).removeClass(classNames.lastnode);
+		},
+		
 		/**
 			* Collapse the tree
 			* @method collapse
@@ -397,8 +437,9 @@ var getClassName = Y.ClassNameManager.getClassName,
 				* @attribute loadOnDemand
 				* @type boolean
 				*
-				* @description Whether children of this node can be laoded on demand.
-				* Use with gallery-yui3treeview-datasource.
+				* @description Whether children of this node can be loaded on demand
+				* (when this tree node is expanded, for example).
+				* Use with gallery-yui3treeview-datasource-ng.
 				*/
 			loadOnDemand : {
 				value: false,
@@ -442,8 +483,8 @@ var getClassName = Y.ClassNameManager.getClassName,
 				* @attribute isLeaf
 				* @type Boolean
 				*
-				* @description Signified whether this node is a leaf node.
-				* Nodes with loadOnDemand set to true are not considered not leafs.
+				* @description Signifies whether this node is a leaf node.
+				* Nodes with loadOnDemand set to true are not considered leafs.
 				*/
 			isLeaf : {
 				value: null,
@@ -451,45 +492,32 @@ var getClassName = Y.ClassNameManager.getClassName,
 					return (this.size() > 0 ? false : true) && (!this.get("loadOnDemand")); //FIXME: loadOnDemand should be in plugin
 				},
 				readOnly: true
+			},
+			/**
+			 * @attribute isLast
+			 * @type Boolean
+			 *
+			 * @description Signifies whether this node is the last child of its parent.
+			 */
+			isLast : {
+				value: null,
+				getter: function() {
+					return (this.get("index") + 1 == this.get("parent").size());
+				},
+				readOnly: true
 			}
 		},
-		HTML_PARSER: { //FIXME: Implement
-			
+		HTML_PARSER: {
 			children : function (srcNode) {
-				var leafs = srcNode.all("> li"),
-					isContained = srcNode.ancestor("ul"),
-					subTree,
-					children = [];
-					
-					
-					
-				if (leafs.size() > 0 || isContained) {
+				return findChildren(srcNode, "> ul > li");
+			},
+			
+			label : function(srcNode) {
+				var labelContentNode = srcNode.one("> a > span");
+				if (labelContentNode !== null) {
 					this._renderFromMarkup = true;
-				} else {
-					this.CONTENT_TEMPLATE = null;
+					return labelContentNode.getContent();
 				}
-				
-				leafs.each(function(node) {
-					var 
-						leafContent = node.one(":first-child"),
-						child = {
-							srcNode : leafContent,
-							boundingBox :node,
-							contentBox : leafContent,
-							type : null
-						};
-						
-					subTree = node.one("> ul"); 
-					
-					if (subTree){
-						child.type = "TreeNode";
-						child.contentBox = subTree;
-						child.srcNode = subTree;
-					}
-					
-					children.push(child);
-				});
-				return children;
-			}      
+			}
 		}
 	});
