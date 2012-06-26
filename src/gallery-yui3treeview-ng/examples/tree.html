@@ -24,17 +24,16 @@
 	<body class="yui3-skin-sam" style="font-size:13px; font-family:arial">
 
 		<!-- Tree from config -->
-		<div style="margin: 20px">
+		<div style="margin: 20px; float: left; clear: both;">
 			<h3>Simple tree from config</h3>
-			<div id="cattree1" style="width:350px; height:200px; border: 1px solid gray"></div>
+			<div id="cattree1" style="min-width:350px; min-height:200px; padding-right: 20px; padding-bottom: 20px; border: 1px solid gray;"></div>
 			<p id="clickme1" style="cursor:pointer; margin-bottom:10px;">Click me to add node</p>
 			<p id="unclickme1" style="display:none; cursor:pointer; margin-bottom:10px;">Click me to remove node</p>
 			<ul id="report1"></ul>
 		</div>
 
 		<script>
-			YUI().use("gallery-yui3treeview-ng", "gallery-yui3treeview-datasource", function(Y) {
-				var target = "#cattree";
+			YUI().use("gallery-yui3treeview-ng", function(Y) {
 				var treeview = new Y.TreeView({
 						startCollapsed: true,
 						children: [ {
@@ -72,6 +71,9 @@
 					r.appendChild("<li>You clicked " + (node.get("isLeaf") ? "leaf" : "node") + " " + node.get("label"));
 					r.appendChild("<li>Path to root is: " + node.path().join(" > "));
 					r.appendChild("<li>State is: " + (node.get("collapsed") ? "collapsed" : "expanded") );
+					node.add({
+						label: "foster-child"
+					});
 				});
 
 				Y.one("#clickme1").once("click", function (e) {
@@ -89,9 +91,9 @@
 		</script>
 
 		<!-- Tree from markup -->
-		<div style="margin: 20px">
+		<div style="margin: 20px; float: left; clear: both;">
 			<h3>Simple tree from markup</h3>
-			<div id="cattree2" style="width:350px; height:200px; border: 1px solid gray">
+			<div id="cattree2" style="min-width:350px; min-height:200px; padding-right: 20px; padding-bottom: 20px; border: 1px solid gray;">
 				<ul>
 					<li><a><span>Root</span></a>
 						<ul>
@@ -116,11 +118,11 @@
 					</li>
 				</ul>
 			</div>
-			<p id="clickme2" style="cursor:ponter">Click me to render tree above!<br><br></p>
+			<p id="clickme2" style="cursor:pointer">Click me to render tree above!<br><br></p>
 		<div>
 
 		<script>
-			YUI().use("gallery-yui3treeview-ng", "gallery-yui3treeview-datasource", function(Y) {
+			YUI().use("gallery-yui3treeview-ng", function(Y) {
 				Y.one("#clickme2").once("click", function(e) {
 					var treeview = new Y.TreeView({
 								srcNode: "#cattree2 > ul" // Its important to set srcNode as a <ul> of the main widget container

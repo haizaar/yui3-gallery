@@ -1,8 +1,9 @@
 YUI.add('gallery-yui3treeview-ng', function(Y) {
 
 
-var getClassName = Y.ClassNameManager.getClassName,
+	var getClassName = Y.ClassNameManager.getClassName,
 		BOUNDING_BOX = "boundingBox",
+		TREEVIEW = "treeview",
 		TREENODE = "treenode",
 		classNames = {
 			tree : getClassName(TREENODE),
@@ -13,13 +14,13 @@ var getClassName = Y.ClassNameManager.getClassName,
 			collapsed : getClassName(TREENODE, "collapsed"),
 			leaf : getClassName(TREENODE, "leaf"),
 			lastnode : getClassName(TREENODE, "last")
-        },
+		},
 		findChildren;
 
 /*
  * Used in HTML_PARSERs to find children of the current widget
  */
-findChildren = function (srcNode, selector) {
+	findChildren = function (srcNode, selector) {
 		var descendants = srcNode.all(selector),
 			children = Array(),
 			child;
@@ -33,7 +34,7 @@ findChildren = function (srcNode, selector) {
 				children.push(child);
 			});
 			return children;
-};
+	};
 
 /**
  * TreeView widget. Provides a tree style widget, with a hierachical representation of it's components.
@@ -46,7 +47,7 @@ findChildren = function (srcNode, selector) {
  * @extends Widget
  * @param {Object} config User configuration object.
  */
-	Y.TreeView = Y.Base.create("treeview", Y.Widget, [Y.WidgetParent], {
+	Y.TreeView = Y.Base.create(TREEVIEW, Y.Widget, [Y.WidgetParent], {
 
 		CONTENT_TEMPLATE :  "<ul></ul>",
 
@@ -104,39 +105,37 @@ findChildren = function (srcNode, selector) {
 			e.treenode.expand();
 		},
 
-        bindUI : function() {
-            var boundingBox, parent;
-			boundingBox = this.get(BOUNDING_BOX);
-			boundingBox.on("click", this.onClickEvents, this);
-
-			boundingBox.delegate("click", Y.bind(function(e) {
-				var twidget = Y.Widget.getByNode(e.target);
-				if (twidget instanceof Y.TreeNode) {
-					this.fire("nodeclick", {treenode: twidget});
-				}
-			}, this), "."+classNames.label);
-			
+		/**
+		 * Sets child event handlers
+		 * @method setChildEventHandlers
+		 * @protected
+		 */
+		_setChildEventHandlers : function () {
+			var parent;
 			this.after("addChild", function(e) {
 				parent = e.child.get("parent");
-				if (e.child.get("isLast")) {
-					parent.item(e.index-1)._unmarkLast();
+				if (e.child.get("isLast") && parent.size() > 1) {
+					parent.item(e.child.get("index")-1)._unmarkLast();
 				}
 			});
 			
 			this.on("removeChild", function(e) {
 				parent = e.child.get("parent");
+				if ((parent.size() == 1) || e.child.get("index") === 0) {
+					return;
+				}
 				if (e.child.get("isLast")) {
-					parent.item(e.index-1)._markLast();
+					parent.item(e.child.get("index")-1)._markLast();
 				}
 			});
 		},
 		
-        /**
-         * Handles all the internal tree events.
-         * @method onViewEvents
-         * @protected
-         */
-		onClickEvents : function (event) {
+		/**
+			* Handles internal tree click events
+			* @method onClickEvents
+			* @protected
+			*/
+		_onClickEvents : function (event) {
 			var target = event.target,
 				twidget = Y.Widget.getByNode(target),
 				toggle = false,
@@ -174,11 +173,26 @@ findChildren = function (srcNode, selector) {
 			if (toggle) {
 				this.fire("nodeToggle", {treenode: twidget});
 			}
+		},
+		
+        bindUI : function() {
+            var boundingBox, parent;
+			boundingBox = this.get(BOUNDING_BOX);
+			boundingBox.on("click", this._onClickEvents, this);
+
+			boundingBox.delegate("click", Y.bind(function(e) {
+				var twidget = Y.Widget.getByNode(e.target);
+				if (twidget instanceof Y.TreeNode) {
+					this.fire("nodeclick", {treenode: twidget});
+				}
+			}, this), "."+classNames.label);
+			
+			this._setChildEventHandlers();
 		}
 
 	}, {
 		
-		NAME : "treeview",
+		NAME : TREEVIEW,
 		ATTRS : {
 			/**
 			 * @attribute defaultChildType
@@ -214,7 +228,7 @@ findChildren = function (srcNode, selector) {
 			 *
 			 * @description Whether children of this node can be loaded on demand
 			 * (when this tree node is expanded, for example).
-			 * Use with gallery-yui3treeview-datasource-ng.
+			 * Use with gallery-yui3treeview-ng-datasource.
 			 */
 			loadOnDemand : {
 				value: false,
@@ -240,10 +254,10 @@ findChildren = function (srcNode, selector) {
 	Y.TreeNode = Y.Base.create(TREENODE, Y.Widget, [Y.WidgetParent, Y.WidgetChild], {
 
 		/**
-			* Flag to determine if the tree is being rendered from markup or not
-			* @property _renderFromMarkup
-			* @protected
-			*/ 
+		 * Flag to determine if the tree is being rendered from markup or not
+		 * @property _renderFromMarkup
+		 * @protected
+		 */
 		_renderFromMarkup : false,
 
 		CONTENT_TEMPLATE :  "<ul></ul>",
@@ -254,6 +268,29 @@ findChildren = function (srcNode, selector) {
 		TREENODELABELCONTENT_TEMPLATE : "<span class={labelContentClassName}>{label}</span>",
 		
 		TOGGLECONTROL_TEMPLATE : "<span class={toggleClassName}></span>",
+
+		bindUI : function() {
+			// Both TreeVew and TreeNode share the same child event handling
+			Y.TreeView.prototype._setChildEventHandlers.apply(this, arguments);
+			
+// 			var parent;
+// 			this.after("addChild", function(e) {
+// 				parent = e.child.get("parent");
+// 				if (e.child.get("isLast") && parent.size() > 1) {
+// 					parent.item(e.child.get("index")-1)._unmarkLast();
+// 				}
+// 			});
+// 			
+// 			this.on("removeChild", function(e) {
+// 				parent = e.child.get("parent");
+// 				if ((parent.size() == 1) || e.child.get("index") === 0) {
+// 					return;
+// 				}
+// 				if (e.child.get("isLast")) {
+// 					parent.item(e.child.get("index")-1)._markLast();
+// 				}
+// 			});
+		},
 		
 		/**
 			* Renders TreeNode
@@ -441,7 +478,7 @@ findChildren = function (srcNode, selector) {
 				*
 				* @description Whether children of this node can be loaded on demand
 				* (when this tree node is expanded, for example).
-				* Use with gallery-yui3treeview-datasource-ng.
+				* Use with gallery-yui3treeview-ng-datasource.
 				*/
 			loadOnDemand : {
 				value: false,
@@ -491,7 +528,7 @@ findChildren = function (srcNode, selector) {
 			isLeaf : {
 				value: null,
 				getter: function() {
-					return (this.size() > 0 ? false : true) && (!this.get("loadOnDemand")); //FIXME: loadOnDemand should be in plugin
+					return (this.size() > 0 ? false : true) && (!this.get("loadOnDemand"));
 				},
 				readOnly: true
 			},
@@ -525,4 +562,4 @@ findChildren = function (srcNode, selector) {
 	});
 
 
-}, '@VERSION@' ,{requires:['substitute', 'widget', 'widget-parent', 'widget-child', 'node-focusmanager', 'array-extras'], skinnable:true});
+}, '@VERSION@' ,{skinnable:true, requires:['substitute', 'widget', 'widget-parent', 'widget-child', 'node-focusmanager', 'array-extras']});
