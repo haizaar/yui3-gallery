@@ -95,9 +95,7 @@
 				});
 				
 				var nodeclickFn = function(e) {
-					this.ds.fire("sendRequest", {
-						treenode : e.treenode,
-					});
+					this.ds.load(e.treenode);
 				}
 				
 				treeview1.on("nodeclick", Y.bind(nodeclickFn, treeview1));
