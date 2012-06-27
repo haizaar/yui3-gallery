@@ -71,9 +71,6 @@
 					r.appendChild("<li>You clicked " + (node.get("isLeaf") ? "leaf" : "node") + " " + node.get("label"));
 					r.appendChild("<li>Path to root is: " + node.path().join(" > "));
 					r.appendChild("<li>State is: " + (node.get("collapsed") ? "collapsed" : "expanded") );
-					node.add({
-						label: "foster-child"
-					});
 				});
 
 				Y.one("#clickme1").once("click", function (e) {
@@ -125,6 +122,7 @@
 			YUI().use("gallery-yui3treeview-ng", function(Y) {
 				Y.one("#clickme2").once("click", function(e) {
 					var treeview = new Y.TreeView({
+								startCollapsed: false,
 								srcNode: "#cattree2 > ul" // Its important to set srcNode as a <ul> of the main widget container
 							});
 					treeview.render();	
