@@ -9,7 +9,7 @@ YUI.add("gallery-yui3treeview-ng-datasource", function(Y) {
 		};
 
 	/**
-		* TreeView data plugin, it allows for dynamic data retreiving and loading
+		* TreeView datasource plugin, it allows for dynamic data retreiving and loading
 		* @class TreeViewDataSource
 		* @constructor
 		* @uses Y.DataSource
@@ -112,15 +112,24 @@ YUI.add("gallery-yui3treeview-ng-datasource", function(Y) {
 		},
 		
 		/**
+		 * Load new tree data at give node.
+		 * @method load
+		 */
+		load : function(node, request) {
+			this.fire("sendRequest", {
+				treenode : node,
+				reuest: request
+			});
+		},
+		
+		/**
 		 * Default event handler for successfull data retrieval
 		 * @method _defSuccessHandler
 		 * @protected
 		 */
 		_defSuccessHandler : function(e) {
-			var tree = this;
-
-			Y.fire("onDataReturnSuccess",{data:e});
-			
+			var tree = e.treenode;
+	
 			tree.get(CONTENT_BOX).removeClass(classNames.loading);
 			if (tree._loadingMsgNode !== null) {
 				tree._loadingMsgNode.remove(true);
@@ -139,8 +148,7 @@ YUI.add("gallery-yui3treeview-ng-datasource", function(Y) {
 		 * @protected
 		 */
 		_defFailureHandler : function(e) {
-			var tree = e.treenode;
-			Y.fire("onDataSourceFailure", {data:e});
+			var tree = e.treenode;			
 			tree.set("loadOnDemand", true);
 			tree.get(CONTENT_BOX).removeClass(classNames.loading);
         },
@@ -162,9 +170,13 @@ YUI.add("gallery-yui3treeview-ng-datasource", function(Y) {
 				return;
 			}
 
-			callback = { //FIXME: bullshit - should fire event!
-				success : Y.bind(this._defSuccessHandler, tree),
-				failure : Y.bind(this._defFailureHandler, tree)
+			callback = {
+				success : Y.bind(function(e) {
+					this.fire("onDataReturnSuccess", {response : e.response, treenode: tree});
+				}, this),
+				failure : Y.bind(function (e) {
+					this.fire("onDataReturnFailure", {error : e.error, treenode: tree});
+				}, this)
 			};
 
 			tree.set("loadOnDemand", false);
