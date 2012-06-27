@@ -176,7 +176,7 @@ YUI.add('gallery-yui3treeview-ng', function(Y) {
 		},
 		
         bindUI : function() {
-            var boundingBox, parent;
+            var boundingBox;
 			boundingBox = this.get(BOUNDING_BOX);
 			boundingBox.on("click", this._onClickEvents, this);
 
@@ -272,24 +272,6 @@ YUI.add('gallery-yui3treeview-ng', function(Y) {
 		bindUI : function() {
 			// Both TreeVew and TreeNode share the same child event handling
 			Y.TreeView.prototype._setChildEventHandlers.apply(this, arguments);
-			
-// 			var parent;
-// 			this.after("addChild", function(e) {
-// 				parent = e.child.get("parent");
-// 				if (e.child.get("isLast") && parent.size() > 1) {
-// 					parent.item(e.child.get("index")-1)._unmarkLast();
-// 				}
-// 			});
-// 			
-// 			this.on("removeChild", function(e) {
-// 				parent = e.child.get("parent");
-// 				if ((parent.size() == 1) || e.child.get("index") === 0) {
-// 					return;
-// 				}
-// 				if (e.child.get("isLast")) {
-// 					parent.item(e.child.get("index")-1)._markLast();
-// 				}
-// 			});
 		},
 		
 		/**
@@ -562,4 +544,4 @@ YUI.add('gallery-yui3treeview-ng', function(Y) {
 	});
 
 
-}, '@VERSION@' ,{skinnable:true, requires:['substitute', 'widget', 'widget-parent', 'widget-child', 'node-focusmanager', 'array-extras']});
+}, '@VERSION@' ,{requires:['substitute', 'widget', 'widget-parent', 'widget-child', 'node-focusmanager', 'array-extras'], skinnable:true});
