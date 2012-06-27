@@ -284,9 +284,11 @@
 				labelContent,
 				labelContentHTML,
 				toggleControlHTML,
-				label;
+				label,
+				isLeaf;
 				
 			toggleControlHTML = Y.substitute(this.TOGGLECONTROL_TEMPLATE,{toggleClassName: classNames.toggle});
+			isLeaf = this.get("isLeaf");
 			
 			if (this._renderFromMarkup) {
 				treeLabel = boundingBox.one(":first-child");
@@ -305,7 +307,7 @@
 				boundingBox.prepend(treeLabel);
 			}
 
-			if (!this.get("isLeaf")) {
+			if (!isLeaf) {
 				treeLabel.appendChild(toggleControlHTML).appendChild(labelContent);
 			} else {
 				treeLabel.append(labelContent);
@@ -313,17 +315,17 @@
 
 			boundingBox.set("role","presentation");
 
-			if (!this.get("isLeaf")) {
+			if (!isLeaf) {
 				if (this.get("root").get("startCollapsed")) {
 					boundingBox.addClass(classNames.collapsed);   
 				} else {
-					if (this.size() === 0) { // Nodes without children / leafs should start in collapsed mode
+					if (this.size() === 0) { // Nodes (not leafs) without children should start in collapsed mode
 						boundingBox.addClass(classNames.collapsed);   
 					}
 				}
 			}
 
-			if (this.get("isLeaf")) {
+			if (isLeaf) {
 				boundingBox.addClass(classNames.leaf);
 			}
 			
@@ -482,7 +484,8 @@
 				* @attribute clabel
 				* @type String
 				*
-				* @description Canonical label for the node. For use of external tools.
+				* @description Canonical label for the node. 
+				* You can set it to anything you like and use later with your external tools.
 				*/
 			clabel : {
 				value: "",
@@ -492,7 +495,8 @@
 				* @attribute nodeId
 				* @type String
 				*
-				* @description Signifies id of this node. For use of external tools.
+				* @description Signifies id of this node.
+				* You can set it to anything you like and use later with your external tools.
 				*/
 			nodeId : {
 				value: "",
