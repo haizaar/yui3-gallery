@@ -174,7 +174,7 @@
 		},
 		
         bindUI : function() {
-            var boundingBox, parent;
+            var boundingBox;
 			boundingBox = this.get(BOUNDING_BOX);
 			boundingBox.on("click", this._onClickEvents, this);
 
