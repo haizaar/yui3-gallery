@@ -1,8 +1,11 @@
 
 	var getClassName = Y.ClassNameManager.getClassName,
 		BOUNDING_BOX = "boundingBox",
+		CONTENT_BOX = "contentBox",
 		TREEVIEW = "treeview",
 		TREENODE = "treenode",
+		CHECKBOXTREEVIEW = "checkboxtreeview",
+		CHECKBOXTREENODE = "checkboxtreenode",
 		classNames = {
 			tree : getClassName(TREENODE),
 			content : getClassName(TREENODE, "content"),
@@ -11,7 +14,18 @@
 			toggle : getClassName(TREENODE, "toggle-control"),
 			collapsed : getClassName(TREENODE, "collapsed"),
 			leaf : getClassName(TREENODE, "leaf"),
-			lastnode : getClassName(TREENODE, "last")
+			lastnode : getClassName(TREENODE, "last"),
+			checkbox : getClassName(CHECKBOXTREENODE, "checkbox")
+		},
+		checkStates = { // Check states for checkbox tree
+			unchecked: 10,
+			halfchecked: 20,
+			checked: 30
+		},
+		checkStatesClasses = {
+			10 : getClassName(CHECKBOXTREENODE, "checkbox-unchecked"),
+			20 : getClassName(CHECKBOXTREENODE, "checkbox-halfchecked"),
+			30 : getClassName(CHECKBOXTREENODE, "checkbox-checked")
 		},
 		findChildren;
 
