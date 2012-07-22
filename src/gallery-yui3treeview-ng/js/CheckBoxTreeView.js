@@ -1,13 +1,11 @@
 
 /**
- * TreeView widget. Provides a tree style widget, with a hierachical representation of it's components.
- * It extends WidgetParent and WidgetChild, please refer to it's documentation for more info.   
- * This widget represents the root cotainer for TreeNode / TreeLeaf objects that build the actual tree structure. 
+ * CheckBoxTreeView widget. Extrends TreeView widget to support relevant events and methods od checkbox tree.
+ * This widget represents the root cotainer for CheckBoxTreeNode objects that build the actual tree structure. 
  * Therefore this widget will not usually have any visual representation. Its also responsible for handling node events.
- * @class TreeNode
+ * @class CheckBoxTreeView
  * @constructor
- * @uses WidgetParent
- * @extends Widget
+ * @extends TreeView
  * @param {Object} config User configuration object.
  */
 	Y.CheckBoxTreeView = Y.Base.create(CHECKBOXTREEVIEW, Y.TreeView, [], {
