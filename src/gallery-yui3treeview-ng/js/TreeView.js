@@ -188,8 +188,7 @@
 		},
 		
         bindUI : function() {
-            var boundingBox;
-			boundingBox = this.get(BOUNDING_BOX);
+            var boundingBox = this.get(BOUNDING_BOX);
 			boundingBox.on("click", this._onClickEvents, this);
 
 			boundingBox.delegate("click", Y.bind(function(e) {

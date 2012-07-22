@@ -1,5 +1,121 @@
 
 /**
+ * TreeView widget. Provides a tree style widget, with a hierachical representation of it's components.
+ * It extends WidgetParent and WidgetChild, please refer to it's documentation for more info.   
+ * This widget represents the root cotainer for TreeNode / TreeLeaf objects that build the actual tree structure. 
+ * Therefore this widget will not usually have any visual representation. Its also responsible for handling node events.
+ * @class TreeNode
+ * @constructor
+ * @uses WidgetParent
+ * @extends Widget
+ * @param {Object} config User configuration object.
+ */
+	Y.CheckBoxTreeView = Y.Base.create(CHECKBOXTREEVIEW, Y.TreeView, [], {
+		
+		initializer : function(config) {
+			this.publish("check", {
+				defaultFn: this._checkDefaultFn
+			});
+		},
+		
+		/**
+		 * Default event handler for "check" event
+		 * @method _nodeClickDefaultFn
+		 * @protected
+		 */
+		_checkDefaultFn: function(e) {
+			e.treenode.toggleCheckedState();
+		},
+		
+		bindUI: function() {
+			this.get(BOUNDING_BOX).delegate("click", Y.bind(function(e) {
+				var twidget = Y.Widget.getByNode(e.target);
+				if (twidget instanceof Y.CheckBoxTreeNode) {
+					this.fire("check", {treenode: twidget});
+				}
+			}, this), "."+classNames.checkbox);
+		},
+
+		/**
+		 * Returns the list of nodes that are roots of checked subtrees
+		 * @method getChecked
+		 * @return {Array} array of tree nodes
+		 */
+		getChecked : function() {
+			var checkedChildren = Array(),
+				halfcheckedChildren = Array(),
+				child,
+				analyzeChild;
+				
+				this.each(function (child) {
+					if (child.get("checked") == checkStates.checked) {
+						checkedChildren.push(child);
+					} else if (child.get("checked") == checkStates.halfchecked) {
+						halfcheckedChildren.push(child);
+					}
+				});
+				
+				analyzeChild = function (child) {
+					if (child.get("checked") == checkStates.checked) {
+						checkedChildren.push(child);
+					} else if (child.get("checked") == checkStates.halfchecked) {
+						halfcheckedChildren.push(child);
+					}
+				};
+				
+				while (halfcheckedChildren.length > 0) {
+					child = halfcheckedChildren.pop();
+					child.each(analyzeChild);
+				}
+				return checkedChildren;   
+		},
+		
+		/**
+		 * Returns list of pathes (breadcrumbs) of nodes that are roots of checked subtrees
+		 * @method getCheckedPathes
+		 * @param cfg {Object} An object literal with the following properties:
+		 *     <dl>
+		 *     <dt><code>labelAttr</code></dt>
+		 *     <dd>Attribute name to use for node representation. Can be any attribute of TreeNode</dd>
+		 *     <dt><code>reverse</code></dt>
+		 *     <dd>Return breadcrumbs from the node to root instead of root to the node</dd>
+		 *     </dl>
+		 * @return {Array} array of node label arrays
+		 */
+		getCheckedPathes : function(cfg) {
+			var nodes = this.getChecked(),
+			nodeArray = Array();
+			
+			if (!cfg) {
+				cfg = {};
+			}
+			if (!cfg.labelAttr) {
+				cfg.labelAttr = "label";
+			}
+			
+			Y.Array.each(nodes, function(node) {
+				nodeArray.push(node.path(cfg));
+			});
+			return nodeArray;
+		}
+		
+	}, {
+		NAME : CHECKBOXTREEVIEW,
+		ATTRS : {
+			/**
+			 * @attribute defaultChildType
+			 * @type String
+			 * @readOnly
+			 * @default child type definition
+			 */
+			defaultChildType : {  
+				value: "CheckBoxTreeNode",
+				readOnly: true
+			}
+		}
+	});
+	
+/**
  * CheckBoxTreeNode widget. Provides a tree style node widget with checkbox
  * It extends Y.TreeNode, please refer to it's documentation for more info.   
  * @class CheckBoxTreeNode
