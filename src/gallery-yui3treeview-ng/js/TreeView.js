@@ -150,11 +150,7 @@
 		_onClickEvents : function (event) {
 			var target = event.target,
 				twidget = Y.Widget.getByNode(target),
-				toggle = false,
-				i,
-				className,
-				classes,
-				cLength;
+				toggle = false;
 			
 			event.preventDefault();
 			
@@ -166,10 +162,7 @@
 				return;
 			}
 			
-			classes = target.get("className").split(" ");
-			cLength = classes.length;
-			for (i=0; i<cLength; i++) {
-				className = classes[i];
+			Y.Array.each(target.get("className").split(" "), function(className) {
 				switch (className) {
 					case classNames.toggle:
 						toggle = true;
@@ -180,7 +173,7 @@
 						}
 						break;
 				}
-			}
+			}, this);
 
 			if (toggle) {
 				this.fire("nodeToggle", {treenode: twidget});
