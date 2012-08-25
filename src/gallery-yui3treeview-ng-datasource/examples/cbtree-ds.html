@@ -102,8 +102,8 @@
 					this.ds.load(e.treenode);
 				}
 				
-				treeview1.on("nodeclick", Y.bind(nodeclickFn, treeview1));
-				treeview2.on("nodeclick", Y.bind(nodeclickFn, treeview2));
+				treeview1.on("nodeExpand", Y.bind(nodeclickFn, treeview1));
+				treeview2.on("nodeExpand", Y.bind(nodeclickFn, treeview2));
 
 				treeview1.render("#cattree1");
 				treeview2.render("#cattree2");
