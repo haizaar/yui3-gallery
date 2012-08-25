@@ -1,4 +1,3 @@
-YUI.add("gallery-yui3treeview-ng-datasource", function(Y) {
 	
 	var getClassName = Y.ClassNameManager.getClassName,
 		CONTENT_BOX = "contentBox",
@@ -17,7 +16,7 @@ YUI.add("gallery-yui3treeview-ng-datasource", function(Y) {
 		*/
 	function TreeViewDataSource () {
 		TreeViewDataSource.superclass.constructor.apply(this, arguments);
-	};
+	}
 
 	TreeViewDataSource.NAME = TREEVIEW_DATASOURCE;
 	TreeViewDataSource.NS = "ds";
@@ -101,7 +100,7 @@ YUI.add("gallery-yui3treeview-ng-datasource", function(Y) {
 				case "local":
 					this.treedatasource =  new Y.DataSource.Local({source: this.get("source")});
 					break;
-			};
+			}
 			
 			this.treedatasource.plug(Y.Plugin.DataSourceJSONSchema, {
 				schema: {
@@ -135,9 +134,9 @@ YUI.add("gallery-yui3treeview-ng-datasource", function(Y) {
 				tree._loadingMsgNode.remove(true);
 			}
 			tree.add(e.response.results);
-// 			if (tree instanceof Y.CheckBoxTreeNode) { // FIXME: handle elsewhere
-// 				tree._syncChildren();
-// 			}
+			if (tree instanceof Y.CheckBoxTreeNode) {
+				tree._syncChildren();
+			}
 			// FIXME: Implement
 			// this.get("host").get(CONTENT_BOX).focusManager.refresh();
         },
@@ -166,7 +165,7 @@ YUI.add("gallery-yui3treeview-ng-datasource", function(Y) {
 				contentBox = tree.get(CONTENT_BOX),
 				callback;
 
-			if (loadOnDemand == false) {
+			if (!loadOnDemand) {
 				return;
 			}
 
@@ -190,10 +189,8 @@ YUI.add("gallery-yui3treeview-ng-datasource", function(Y) {
 				request : "?"+request,
 				callback : callback
 			});
-        }
-    });
-    
-    Y.namespace('Plugin.TreeView');
-    Y.Plugin.TreeViewDataSource = TreeViewDataSource;
+		}
+	});
 
-}, 'gallery-2011.01.03-18-30' ,{ requires: ["gallery-yui3-treeview-ng", "datasource", "datasource-jsonschema"]} );
+	Y.Plugin.TreeViewDataSource = TreeViewDataSource;
+	
