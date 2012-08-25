@@ -26,9 +26,10 @@
 		},
 		
 		bindUI: function() {
+			var boundingBox = this.get(BOUNDING_BOX);
 			Y.CheckBoxTreeView.superclass.bindUI.apply(this, arguments);
 			
-			this.get(BOUNDING_BOX).on("click", function(e) {
+			boundingBox.on("click", function(e) {
 				var twidget = Y.Widget.getByNode(e.target),
 					check = false;
 				if (twidget instanceof Y.CheckBoxTreeNode) {
@@ -49,6 +50,21 @@
 						this.fire("check", {treenode: twidget});
 					}
 				}
+			}, this);
+			
+			boundingBox.on("keypress", function(e) {
+				var target = e.target,
+					twidget = Y.Widget.getByNode(target),
+					keycode = e.keyCode;
+				
+				if (!twidget instanceof Y.CheckBoxTreeNode) {
+					return;
+				}
+				
+				if (keycode == 32) {
+					this.fire("check", {treenode: twidget});
+					e.preventDefault();
+				} 
 			}, this);
 		},
 

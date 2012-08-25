@@ -203,7 +203,7 @@
         bindUI : function() {
             var boundingBox = this.get(BOUNDING_BOX);
 			boundingBox.on("click", this._onClickEvents, this);
-			boundingBox.on("keydown", this._onKeyEvents, this);
+			boundingBox.on("keypress", this._onKeyEvents, this);
 
 			boundingBox.delegate("click", Y.bind(function(e) {
 				var twidget = Y.Widget.getByNode(e.target);

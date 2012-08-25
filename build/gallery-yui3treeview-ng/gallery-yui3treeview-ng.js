@@ -205,7 +205,7 @@ YUI.add('gallery-yui3treeview-ng', function(Y) {
         bindUI : function() {
             var boundingBox = this.get(BOUNDING_BOX);
 			boundingBox.on("click", this._onClickEvents, this);
-			boundingBox.on("keydown", this._onKeyEvents, this);
+			boundingBox.on("keypress", this._onKeyEvents, this);
 
 			boundingBox.delegate("click", Y.bind(function(e) {
 				var twidget = Y.Widget.getByNode(e.target);
@@ -237,7 +237,7 @@ YUI.add('gallery-yui3treeview-ng', function(Y) {
 			 * @default child type definition
 			 */
 			defaultChildType : {  
-				value: "TreeNode", //FIXME: should be TreeNode and overrided in plugin
+				value: "TreeNode",
 				readOnly: true
 			},
 			/**
@@ -610,9 +610,10 @@ YUI.add('gallery-yui3treeview-ng', function(Y) {
 		},
 		
 		bindUI: function() {
+			var boundingBox = this.get(BOUNDING_BOX);
 			Y.CheckBoxTreeView.superclass.bindUI.apply(this, arguments);
 			
-			this.get(BOUNDING_BOX).on("click", function(e) {
+			boundingBox.on("click", function(e) {
 				var twidget = Y.Widget.getByNode(e.target),
 					check = false;
 				if (twidget instanceof Y.CheckBoxTreeNode) {
@@ -633,6 +634,21 @@ YUI.add('gallery-yui3treeview-ng', function(Y) {
 						this.fire("check", {treenode: twidget});
 					}
 				}
+			}, this);
+			
+			boundingBox.on("keypress", function(e) {
+				var target = e.target,
+					twidget = Y.Widget.getByNode(target),
+					keycode = e.keyCode;
+				
+				if (!twidget instanceof Y.CheckBoxTreeNode) {
+					return;
+				}
+				
+				if (keycode == 32) {
+					this.fire("check", {treenode: twidget});
+					e.preventDefault();
+				} 
 			}, this);
 		},
 
@@ -770,7 +786,7 @@ YUI.add('gallery-yui3treeview-ng', function(Y) {
 				this.set("checked", checkStates.unchecked);
 			}
 			
-			if (!this.isRoot()) { //FIXME: Who is your root??? TreeView??
+			if (!this.isRoot()) {
 				this.get("parent").fire("childCheckedSateChange");
 			}
 		},
