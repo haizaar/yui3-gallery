@@ -28,12 +28,28 @@
 		bindUI: function() {
 			Y.CheckBoxTreeView.superclass.bindUI.apply(this, arguments);
 			
-			this.get(BOUNDING_BOX).delegate("click", Y.bind(function(e) {
-				var twidget = Y.Widget.getByNode(e.target);
+			this.get(BOUNDING_BOX).on("click", function(e) {
+				var twidget = Y.Widget.getByNode(e.target),
+					check = false;
 				if (twidget instanceof Y.CheckBoxTreeNode) {
-					this.fire("check", {treenode: twidget});
+					Y.Array.each(e.target.get("className").split(" "), function (className) {
+						switch (className) {
+							case classNames.checkbox:
+								check = true;
+								break;
+							case classNames.labelContent:
+								if (this.get("checkOnLabelClick")) {
+									check = true;
+								}
+								break;
+						}
+					}, this);
+			
+					if (check) {
+						this.fire("check", {treenode: twidget});
+					}
 				}
-			}, this), "."+classNames.checkbox);
+			}, this);
 		},
 
 		/**
@@ -111,6 +127,15 @@
 			defaultChildType : {  
 				value: "CheckBoxTreeNode",
 				readOnly: true
+			},
+			/**
+			 * @attribute checkOnLabelClick
+			 * @type Boolean
+			 * @whether to change node checked state on label clicks with addition to checkbox control clicks
+			 */
+			checkOnLabelClick : {
+				value: true,
+				validator: Y.Lang.isBoolean
 			}
 		}
 	});
