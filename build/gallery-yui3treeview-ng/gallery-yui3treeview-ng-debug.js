@@ -746,6 +746,7 @@ YUI.add('gallery-yui3treeview-ng', function(Y) {
 		},
 		
 		bindUI : function() {
+			Y.CheckBoxTreeNode.superclass.bindUI.apply(this, arguments);
 			this.on("checkedChange", this._onCheckedChange);
 		},
 		
