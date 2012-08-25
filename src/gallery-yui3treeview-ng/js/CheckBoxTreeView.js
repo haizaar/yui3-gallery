@@ -186,7 +186,7 @@
 				this.set("checked", checkStates.unchecked);
 			}
 			
-			if (!this.isRoot()) { //FIXME: Who is your root??? TreeView??
+			if (!this.isRoot()) {
 				this.get("parent").fire("childCheckedSateChange");
 			}
 		},

@@ -121,7 +121,7 @@ YUI.add('gallery-yui3treeview-ng', function(Y) {
 
 		/**
 		 * Sets child event handlers
-		 * @method setChildEventHandlers
+		 * @method _setChildEventHandlers
 		 * @protected
 		 */
 		_setChildEventHandlers : function () {
@@ -146,7 +146,7 @@ YUI.add('gallery-yui3treeview-ng', function(Y) {
 		
 		/**
 			* Handles internal tree click events
-			* @method onClickEvents
+			* @method _onClickEvents
 			* @protected
 			*/
 		_onClickEvents : function (event) {
@@ -182,9 +182,30 @@ YUI.add('gallery-yui3treeview-ng', function(Y) {
 			}
 		},
 		
+		/**
+		 * Handles internal tree keyboard interaction
+		 * @method _onKeyEvents
+		 * @protected
+		 */
+		_onKeyEvents : function (event) {
+			var target = event.target,
+				twidget = Y.Widget.getByNode(target),
+				keycode = event.keyCode,
+				collapsed = twidget.get("collapsed");
+				
+			if (twidget.get("isLeaf")) {
+				return;
+			}
+			
+			if ( ((keycode == 39) && collapsed) || ((keycode == 37) && !collapsed) ) {
+				this.fire("nodeToggle", {treenode: twidget});
+			}			   
+		},
+							   
         bindUI : function() {
             var boundingBox = this.get(BOUNDING_BOX);
 			boundingBox.on("click", this._onClickEvents, this);
+			boundingBox.on("keydown", this._onKeyEvents, this);
 
 			boundingBox.delegate("click", Y.bind(function(e) {
 				var twidget = Y.Widget.getByNode(e.target);
@@ -194,6 +215,15 @@ YUI.add('gallery-yui3treeview-ng', function(Y) {
 			}, this), "."+classNames.label);
 			
 			this._setChildEventHandlers();
+			
+			boundingBox.plug(Y.Plugin.NodeFocusManager, {
+				descendants: ".yui3-treenode-label",
+				keys: {
+					next: "down:40",    // Down arrow
+					previous: "down:38" // Up arrow 
+				},
+				circular: false
+			});
 		}
 
 	}, {

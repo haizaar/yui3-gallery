@@ -1,6 +1,7 @@
 	
 	var getClassName = Y.ClassNameManager.getClassName,
 		CONTENT_BOX = "contentBox",
+		BOUNDING_BOX = "boundingBox",
 		TREEVIEW_DATASOURCE = "treeviewdatasource",
 		TREENODE = "treenode",
 		classNames = {
@@ -137,8 +138,7 @@
 			if (tree instanceof Y.CheckBoxTreeNode) {
 				tree._syncChildren();
 			}
-			// FIXME: Implement
-			// this.get("host").get(CONTENT_BOX).focusManager.refresh();
+			this.get("host").get(BOUNDING_BOX).focusManager.refresh();
         },
         
 		/**

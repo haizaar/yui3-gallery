@@ -1,7 +1,7 @@
 
 .yui3-js-enabled .yui3-treeview-hidden,
 .yui3-js-enabled .yui3-treeview-loading {
-    display:none;
+    display: none;
 }
 
 .yui3-js-enabled .yui3-treenode {
@@ -13,6 +13,6 @@
 }
 
 .yui3-js-enabled .yui3-treenode-collapsed .yui3-treenode-content {
-    display : none;
+    display: none;
 }
 
