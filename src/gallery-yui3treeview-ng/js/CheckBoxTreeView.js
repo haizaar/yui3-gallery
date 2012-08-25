@@ -26,6 +26,8 @@
 		},
 		
 		bindUI: function() {
+			Y.CheckBoxTreeView.superclass.bindUI.apply(this, arguments);
+			
 			this.get(BOUNDING_BOX).delegate("click", Y.bind(function(e) {
 				var twidget = Y.Widget.getByNode(e.target);
 				if (twidget instanceof Y.CheckBoxTreeNode) {
@@ -80,7 +82,7 @@
 		 *     </dl>
 		 * @return {Array} array of node label arrays
 		 */
-		getCheckedPathes : function(cfg) {
+		getCheckedPaths : function(cfg) {
 			var nodes = this.getChecked(),
 			nodeArray = Array();
 			

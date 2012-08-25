@@ -62,3 +62,20 @@
 	padding-left: 22px;
 }
 
+
+.yui3-skin-sam .yui3-treenode .yui3-treenode-label .yui3-checkboxtreenode-checkbox {
+	padding-left: 20px;
+}
+
+.yui3-skin-sam .yui3-treenode .yui3-treenode-label .yui3-checkboxtreenode-checkbox.yui3-checkboxtreenode-checkbox-unchecked {
+	background: url("treeview-checkboxes.gif") no-repeat scroll 0 -3px transparent;
+}
+
+.yui3-skin-sam .yui3-treenode .yui3-treenode-label .yui3-checkboxtreenode-checkbox.yui3-checkboxtreenode-checkbox-halfchecked {
+	background: url("treeview-checkboxes.gif") no-repeat scroll 0 -66px transparent;
+}
+
+.yui3-skin-sam .yui3-treenode .yui3-treenode-label .yui3-checkboxtreenode-checkbox.yui3-checkboxtreenode-checkbox-checked {
+	background: url("treeview-checkboxes.gif") no-repeat scroll 0 -131px transparent;
+}
+
