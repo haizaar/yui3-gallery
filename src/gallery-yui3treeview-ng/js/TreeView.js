@@ -53,7 +53,7 @@
  * It extends WidgetParent and WidgetChild, please refer to it's documentation for more info.   
  * This widget represents the root cotainer for TreeNode objects that build the actual tree structure. 
  * Therefore this widget will not usually have any visual representation. Its also responsible for handling node events.
- * @class TreeNode
+ * @class TreeView
  * @constructor
  * @uses WidgetParent
  * @extends Widget
