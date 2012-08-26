@@ -104,7 +104,7 @@
 		
 		/**
 		 * Returns list of pathes (breadcrumbs) of nodes that are roots of checked subtrees
-		 * @method getCheckedPathes
+		 * @method getCheckedPaths
 		 * @param cfg {Object} An object literal with the following properties:
 		 *     <dl>
 		 *     <dt><code>labelAttr</code></dt>
