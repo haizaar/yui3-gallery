@@ -346,8 +346,8 @@
 			/**
 			* @attribute checked
 			* @type {String|Number}
-			* @description default child type definition. Accepts either <code>unchecked</code>, <code>halfchecked</code>, <code>checked</code>
-			* or correspondingly 10, 20, 30.
+			* @description Signifies current "checked" state. Accepts either <code>unchecked</code>, <code>halfchecked</code>, <code>checked</code>.
+			* or correspondingly 10, 20, 30. Getter returns only numeric value.
 			*/
 			checked : {
 				value : 10,

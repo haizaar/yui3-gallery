@@ -12,19 +12,18 @@
 </head>
 <body class="yui3-skin-sam">
 
-<a href="https://github.com/yui/yuidoc">
+<a href="https://github.com/haizaar/yui3-gallery/blob/master/src/gallery-yui3treeview-ng">
 	<img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub">
 </a>
 
 <div id="doc">
 	
-	<header>	
-    <div id="hd" class="yui3-g">
+    <div id="hd" class="yui3-g"><header>
 		<div class="content">		
 			<div id="hd-logo" role="image" aria-label="YUI logo"></div>
 		</div>
-    </div>
-	</header>	
+    </header></div>
+	
 
 	<div id="bd" class="clearfix yui3-g">
 	
@@ -92,91 +91,14 @@
 				</div>
 		</div>
 		<!-- Side bar end -->
-
     </div>
+
+    <div id="ft"><footer>
+        <p class="copyright">
+        All code on this site is licensed under the <a href="/license/">BSD License</a> unless stated otherwise.<br>
+        </p>
+    </footer></div>
 </div>
-		
-<!--		
-        <div class="yui3-u-3-4">
-            <div id="main">
-                <div class="content">{{>layout_content}}</div>
-            </div>
-        </div>
--->
-<!--
-        <div class="yui3-u-1-4">
-            <div class="sidebar">
-                <ul class="links">
-                    <li><a href="https://github.com/yui/yuidoc/" class="button">Get the Source</a></li>
-                    <li><a href="https://groups.google.com/forum/#!forum/yuidoc" class="button">Questions? Join the Mailing List</a></li>
-                    <li><a href="https://github.com/yui/yuidoc/issues/" class="button">File an Issue</a></li>
-                    <li><a href="{{projectBase}}api/" class="button">View API Documentation</a></li>
-                </ul>
-                <div class="sidebox">
-                    <div class="hd">
-                        <h2 class="no-toc">Build Status</h2>
-                    </div>
-
-                    <div class="bd">
-                        <a href="http://travis-ci.org/yui/yuidoc"><img src="https://secure.travis-ci.org/yui/yuidoc.png?branch=master" border="0"></a>
-                    </div>
-                </div>
-                {{^hideTableOfContents}}
-                    <div id="toc" class="sidebox">
-                        <div class="hd">
-                            <h2 class="no-toc">Table of Contents</h2>
-                        </div>
-
-                        <div class="bd">
-                            
-                        </div>
-                    </div>
-                {{/hideTableOfContents}}
-
-                {{#if hasOwnExamples}}
-                    <div class="sidebox">
-                        <div class="hd">
-                            <h2 class="no-toc">Examples</h2>
-                        </div>
-
-                        <div class="bd">
-                            <ul class="examples">
-                                {{#examples}}
-                                    {{#unless inherited}}
-                                        <li data-description="{{description}}">
-                                            <a href="{{name}}.html">{{displayName}}</a>
-                                        </li>
-                                    {{/unless}}
-                                {{/examples}}
-                            </ul>
-                        </div>
-                    </div>
-                {{/if}}
-
-                {{#if hasInheritedExamples}}
-                    <div class="sidebox">
-                        <div class="hd">
-                            <h2 class="no-toc">Examples That Use This Component</h2>
-                        </div>
-
-                        <div class="bd">
-                            <ul class="examples">
-                                {{#examples}}
-                                    {{#if inherited}}
-                                        <li data-description="{{description}}">
-                                            <a href="../{{componentName}}/{{name}}.html">{{displayName}}</a>
-                                        </li>
-                                    {{/if}}
-                                {{/examples}}
-                            </ul>
-                        </div>
-                    </div>
-                {{/if}}
-            </div>
-        </div>
--->
-
-
 
 <script src="{{projectAssets}}/vendor/prettify/prettify-min.js"></script>
 <script>prettyPrint();</script>

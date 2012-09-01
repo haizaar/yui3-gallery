@@ -1,5 +1,5 @@
 
-all: doc bin
+all: bin doc
 
 doc:
 	selleck
