@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js&#x2F;CheckBoxTreeView.js - TreeView</title>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic,700italic">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.6.0/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="http://yuilibrary.com/combo/css?main-min.css">
+    <link rel="stylesheet" href="http://yuilibrary.com/css/apidocs-min.css">
+    <link rel="stylesheet" href="http://yuilibrary.com/vendor/prettify/prettify-min.css">
+    <link rel="shortcut icon" type="image/png" href="http://yuilibrary.com/img/favicon.png">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;combo?3.5.1&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<a href="https://github.com/yui/yuidoc">
+	<img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub">
+</a>
+
+<div id="doc">
+	
+	<header>	
+    <div id="hd" class="yui3-g">
+		<div class="content">		
+			<div class="yui3-u-3-4">
+			
+				<h1><img src="..&#x2F;assets/css/logo.png" title="TreeView"></h1>
+			
+			</div>
+			<div class="yui3-u-1-4 version">
+				
+			</div>
+		</div>
+    </div>
+	</header>
+
+	<div id="bd" class="clearfix yui3-g">
+	
+		<!-- Title -->
+		<div class="yui3-u-1">
+			<div id="docs-hd" class="content">
+				<h1>TreeView: js&#x2F;CheckBoxTreeView.js</h1>
+				<!-- <a href="#docs-toc" class="jump" tabindex="1">Jump to Table of Contents</a> -->
+			</div>
+		</div>
+
+		<!-- Side bar begin -->  
+		<div class="yui3-u-1-4">
+				<div id="docs-sidebar" class="sidebar apidocs">
+					<div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="..&#x2F;classes/CheckBoxTreeNode.html">CheckBoxTreeNode</a></li>
+            
+                <li><a href="..&#x2F;classes/CheckBoxTreeView.html">CheckBoxTreeView</a></li>
+            
+                <li><a href="..&#x2F;classes/TreeNode.html">TreeNode</a></li>
+            
+                <li><a href="..&#x2F;classes/TreeView.html">TreeView</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+				</div>
+		</div>
+		<!-- Side bar end -->
+
+		<!-- Main content begin -->
+		<div class="yui3-u-3-4 print-max-width">
+			    <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+			<div class="apidocs">
+				<div id="docs-main">
+					<div class="content">
+						<h1 class="file-heading">File: js&#x2F;CheckBoxTreeView.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+
+&#x2F;**
+ * CheckBoxTreeView widget. Extrends TreeView widget to support relevant events and methods od checkbox tree.
+ * This widget represents the root cotainer for CheckBoxTreeNode objects that build the actual tree structure. 
+ * Therefore this widget will not usually have any visual representation. Its also responsible for handling node events.
+ * @class CheckBoxTreeView
+ * @constructor
+ * @extends TreeView
+ * @param {Object} config User configuration object.
+ *&#x2F;
+	Y.CheckBoxTreeView = Y.Base.create(CHECKBOXTREEVIEW, Y.TreeView, [], {
+		
+		initializer : function(config) {
+			&#x2F;**
+			 * Fires when node checkbox state is changed
+			 * @event check
+			 * @param {TreeNode} treenode tree node that is checked
+			 *&#x2F;
+			this.publish(&quot;check&quot;, {
+				defaultFn: this._checkDefaultFn
+			});
+		},
+		
+		&#x2F;**
+		 * Default event handler for &quot;check&quot; event
+		 * @method _nodeClickDefaultFn
+		 * @protected
+		 *&#x2F;
+		_checkDefaultFn: function(e) {
+			e.treenode.toggleCheckedState();
+		},
+		
+		bindUI: function() {
+			var boundingBox = this.get(BOUNDING_BOX);
+			Y.CheckBoxTreeView.superclass.bindUI.apply(this, arguments);
+			
+			boundingBox.on(&quot;click&quot;, function(e) {
+				var twidget = Y.Widget.getByNode(e.target),
+					check = false;
+				if (twidget instanceof Y.CheckBoxTreeNode) {
+					Y.Array.each(e.target.get(&quot;className&quot;).split(&quot; &quot;), function (className) {
+						switch (className) {
+							case classNames.checkbox:
+								check = true;
+								break;
+							case classNames.labelContent:
+								if (this.get(&quot;checkOnLabelClick&quot;)) {
+									check = true;
+								}
+								break;
+						}
+					}, this);
+			
+					if (check) {
+						this.fire(&quot;check&quot;, {treenode: twidget});
+					}
+				}
+			}, this);
+			
+			boundingBox.on(&quot;keypress&quot;, function(e) {
+				var target = e.target,
+					twidget = Y.Widget.getByNode(target),
+					keycode = e.keyCode;
+				
+				if (!twidget instanceof Y.CheckBoxTreeNode) {
+					return;
+				}
+				
+				if (keycode == 32) {
+					this.fire(&quot;check&quot;, {treenode: twidget});
+					e.preventDefault();
+				} 
+			}, this);
+		},
+
+		&#x2F;**
+		 * Returns the list of nodes that are roots of checked subtrees
+		 * @method getChecked
+		 * @return {Array} array of tree nodes
+		 *&#x2F;
+		getChecked : function() {
+			var checkedChildren = Array(),
+				halfcheckedChildren = Array(),
+				child,
+				analyzeChild;
+				
+				this.each(function (child) {
+					if (child.get(&quot;checked&quot;) == checkStates.checked) {
+						checkedChildren.push(child);
+					} else if (child.get(&quot;checked&quot;) == checkStates.halfchecked) {
+						halfcheckedChildren.push(child);
+					}
+				});
+				
+				analyzeChild = function (child) {
+					if (child.get(&quot;checked&quot;) == checkStates.checked) {
+						checkedChildren.push(child);
+					} else if (child.get(&quot;checked&quot;) == checkStates.halfchecked) {
+						halfcheckedChildren.push(child);
+					}
+				};
+				
+				while (halfcheckedChildren.length &gt; 0) {
+					child = halfcheckedChildren.pop();
+					child.each(analyzeChild);
+				}
+				return checkedChildren;   
+		},
+		
+		&#x2F;**
+		 * Returns list of pathes (breadcrumbs) of nodes that are roots of checked subtrees
+		 * @method getCheckedPaths
+		 * @param cfg {Object} An object literal with the following properties:
+		 *     &lt;dl&gt;
+		 *     &lt;dt&gt;&lt;code&gt;labelAttr&lt;&#x2F;code&gt;&lt;&#x2F;dt&gt;
+		 *     &lt;dd&gt;Attribute name to use for node representation. Can be any attribute of TreeNode&lt;&#x2F;dd&gt;
+		 *     &lt;dt&gt;&lt;code&gt;reverse&lt;&#x2F;code&gt;&lt;&#x2F;dt&gt;
+		 *     &lt;dd&gt;Return breadcrumbs from the node to root instead of root to the node&lt;&#x2F;dd&gt;
+		 *     &lt;&#x2F;dl&gt;
+		 * @return {Array} array of node label arrays
+		 *&#x2F;
+		getCheckedPaths : function(cfg) {
+			var nodes = this.getChecked(),
+			nodeArray = Array();
+			
+			if (!cfg) {
+				cfg = {};
+			}
+			if (!cfg.labelAttr) {
+				cfg.labelAttr = &quot;label&quot;;
+			}
+			
+			Y.Array.each(nodes, function(node) {
+				nodeArray.push(node.path(cfg));
+			});
+			return nodeArray;
+		}
+		
+	}, {
+		NAME : CHECKBOXTREEVIEW,
+		ATTRS : {
+			&#x2F;**
+			 * @attribute defaultChildType
+			 * @type String
+			 * @readOnly
+			 * @description default child type definition
+			 *&#x2F;
+			defaultChildType : {  
+				value: &quot;CheckBoxTreeNode&quot;,
+				readOnly: true
+			},
+			&#x2F;**
+			 * @attribute checkOnLabelClick
+			 * @type Boolean
+			 * @description Whether to change node checked state on label clicks with addition to checkbox control clicks
+			 *&#x2F;
+			checkOnLabelClick : {
+				value: true,
+				validator: Y.Lang.isBoolean
+			}
+		}
+	});
+	
+&#x2F;**
+ * CheckBoxTreeNode widget. Provides a tree style node widget with checkbox
+ * It extends Y.TreeNode, please refer to it&#x27;s documentation for more info.   
+ * @class CheckBoxTreeNode
+ * @constructor
+ * @extends TreeNode
+ * @param {Object} config User configuration object.
+ *&#x2F;
+	Y.CheckBoxTreeNode = Y.Base.create(CHECKBOXTREENODE, Y.TreeNode, [], {
+		
+		initializer : function() {
+			this.publish(&quot;childCheckedSateChange&quot;, {
+				defaultFn: this._childCheckedSateChangeDefaultFn,
+				bubbles: false
+			});
+		},
+		
+		&#x2F;**
+		* Default handler for childCheckedSateChange. Updates this parent state
+		* to match current children states.
+		* @method _childCheckedSateChangeDefaultFn
+		* @protected
+		*&#x2F;
+		_childCheckedSateChangeDefaultFn : function(e) {
+			var checkedChildren = 0,
+				halfCheckedChildren = 0,
+				cstate;
+			
+			this.each(function(child) {
+				cstate = child.get(&quot;checked&quot;);
+				if (cstate == checkStates.checked) {
+					checkedChildren++;
+				}
+				if (cstate == checkStates.halfchecked) {
+					halfCheckedChildren++;
+				}
+			});
+				
+			if (checkedChildren == this.size()) {
+				this.set(&quot;checked&quot;, checkStates.checked);
+			} else if (checkedChildren &gt; 0 || halfCheckedChildren &gt; 0) {
+				this.set(&quot;checked&quot;, checkStates.halfchecked);
+			} else {
+				this.set(&quot;checked&quot;, checkStates.unchecked);
+			}
+			
+			if (!this.isRoot()) {
+				this.get(&quot;parent&quot;).fire(&quot;childCheckedSateChange&quot;);
+			}
+		},
+		
+		bindUI : function() {
+			Y.CheckBoxTreeNode.superclass.bindUI.apply(this, arguments);
+			this.on(&quot;checkedChange&quot;, this._onCheckedChange);
+		},
+		
+		&#x2F;**
+		* Event handler that updates UI according to checked attribute change
+		* @method _onCheckedChange
+		* @protected
+		*&#x2F;
+		_onCheckedChange: function(e) {
+			e.stopPropagation();
+			this._updateCheckedStateUI(e.prevVal, e.newVal);
+		},
+		
+		&#x2F;**
+		* Synchronize CSS classes to conform to checked state
+		* @method _updateCheckedStateUI
+		* @protected
+		*&#x2F;
+		_updateCheckedStateUI : function(oldState, newState) {
+			var checkBox = this._getCheckBoxNode();
+			checkBox.removeClass(checkStatesClasses[oldState]);
+			checkBox.addClass(checkStatesClasses[newState]);
+		},
+		
+		&#x2F;**
+		* Returns checkbox node
+		* @method _getCheckBoxNode
+		* @protected
+		*&#x2F;
+		_getCheckBoxNode : function() {
+			return this.get(BOUNDING_BOX).one(&quot;.&quot; + classNames.checkbox);
+		},
+		
+		CHECKBOX_TEMPLATE : &quot;&lt;span class={checkboxClassName}&gt;&lt;&#x2F;span&gt;&quot;,
+		
+		renderUI : function() {
+			var parentNode,
+			labelContentNode,
+			checkboxNode;
+			
+			Y.CheckBoxTreeNode.superclass.renderUI.apply(this, arguments);
+			
+			checkboxNode = Y.Node.create(Y.substitute(this.CHECKBOX_TEMPLATE, {checkboxClassName: classNames.checkbox}));
+			labelContentNode = this._getLabelContentNode();
+			parentNode = labelContentNode.get(&quot;parentNode&quot;);
+			labelContentNode.remove();
+			checkboxNode.append(labelContentNode);
+			parentNode.append(checkboxNode);
+			
+			&#x2F;&#x2F; update state
+			this._getCheckBoxNode().addClass(checkStatesClasses[this.get(&quot;checked&quot;)]);
+			
+			&#x2F;&#x2F; reuse CSS
+			this.get(CONTENT_BOX).addClass(classNames.content);
+		},
+		
+		syncUI : function() {
+			Y.CheckBoxTreeNode.superclass.syncUI.apply(this, arguments);
+			this._syncChildren();
+		},
+		
+		
+		&#x2F;**
+		* Toggles checked &#x2F; unchecked state of the node
+		* @method toggleCheckedState
+		*&#x2F;
+		toggleCheckedState : function() {
+			if (this.get(&quot;checked&quot;) == checkStates.checked) {
+				this._uncheck();
+			} else {
+				this._check();
+			}
+			this.get(&quot;parent&quot;).fire(&quot;childCheckedSateChange&quot;);
+		},
+		
+		&#x2F;**
+		 * Sets this node as checked and propagates to children
+		 * @method _check
+		 * @protected
+		 *&#x2F;
+		_check : function() {
+			this.set(&quot;checked&quot;, checkStates.checked);
+			this.each(function(child) {
+				child._check();
+			});
+		},
+		
+		&#x2F;**
+		 * Set this node as unchecked and propagates to children
+		 * @method _uncheck
+		 * @protected
+		 *&#x2F;
+		_uncheck : function() {
+			this.set(&quot;checked&quot;, checkStates.unchecked);
+			this.each(function(child) {
+				child._uncheck();
+			});
+		},
+		
+		&#x2F;**
+		 * Synchronizes children states to match the state of the current node
+		 * @method _uncheck
+		 * @protected
+		 *&#x2F;
+		_syncChildren : function() {
+			if (this.get(&quot;checked&quot;) == checkStates.unchecked) {
+				this._uncheck();
+			} else if (this.get(&quot;checked&quot;) == checkStates.checked) {
+				this._check();
+			} else {
+				this.each(function (child) {
+					child._syncChildren();
+				});
+			}
+		}
+		
+	}, {
+		NAME : CHECKBOXTREENODE,
+		ATTRS : {
+			&#x2F;**
+			* @attribute defaultChildType
+			* @type String
+			* @readOnly
+			* @description default child type definition
+			*&#x2F;
+			defaultChildType : {  
+				value: &quot;CheckBoxTreeNode&quot;,
+				readOnly: true
+			},
+			&#x2F;**
+			* @attribute checked
+			* @type {String|Number}
+			* @description Signifies current &quot;checked&quot; state. Accepts either &lt;code&gt;unchecked&lt;&#x2F;code&gt;, &lt;code&gt;halfchecked&lt;&#x2F;code&gt;, &lt;code&gt;checked&lt;&#x2F;code&gt;.
+			* or correspondingly 10, 20, 30. Getter returns only numeric value.
+			*&#x2F;
+			checked : {
+				value : 10,
+				setter : function(val) {
+					var returnVal = Y.Attribute.INVALID_VALUE;
+					if (checkStates[val] !== null) {
+						returnVal = checkStates[val];
+					} else if ([10, 20, 30].indexOf(val) &gt;= 0) {
+						returnVal = val;
+					}
+					return returnVal;
+				}
+			}
+		}
+	});
+
+    </pre>
+</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Main content end -->
+    </div>
+</div>
+
+<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="..&#x2F;assets/js/yui-prettify.js"></script>
+<script src="..&#x2F;assets/../api.js"></script>
+<script src="..&#x2F;assets/js/api-filter.js"></script>
+<script src="..&#x2F;assets/js/api-list.js"></script>
+<script src="..&#x2F;assets/js/api-search.js"></script>
+<script src="..&#x2F;assets/js/apidocs.js"></script>
+</body>
+</html>

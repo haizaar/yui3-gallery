@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js&#x2F;TreeView.js - TreeView</title>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic,700italic">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.6.0/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="http://yuilibrary.com/combo/css?main-min.css">
+    <link rel="stylesheet" href="http://yuilibrary.com/css/apidocs-min.css">
+    <link rel="stylesheet" href="http://yuilibrary.com/vendor/prettify/prettify-min.css">
+    <link rel="shortcut icon" type="image/png" href="http://yuilibrary.com/img/favicon.png">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;combo?3.5.1&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<a href="https://github.com/yui/yuidoc">
+	<img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub">
+</a>
+
+<div id="doc">
+	
+	<header>	
+    <div id="hd" class="yui3-g">
+		<div class="content">		
+			<div class="yui3-u-3-4">
+			
+				<h1><img src="..&#x2F;assets/css/logo.png" title="TreeView"></h1>
+			
+			</div>
+			<div class="yui3-u-1-4 version">
+				
+			</div>
+		</div>
+    </div>
+	</header>
+
+	<div id="bd" class="clearfix yui3-g">
+	
+		<!-- Title -->
+		<div class="yui3-u-1">
+			<div id="docs-hd" class="content">
+				<h1>TreeView: js&#x2F;TreeView.js</h1>
+				<!-- <a href="#docs-toc" class="jump" tabindex="1">Jump to Table of Contents</a> -->
+			</div>
+		</div>
+
+		<!-- Side bar begin -->  
+		<div class="yui3-u-1-4">
+				<div id="docs-sidebar" class="sidebar apidocs">
+					<div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="..&#x2F;classes/CheckBoxTreeNode.html">CheckBoxTreeNode</a></li>
+            
+                <li><a href="..&#x2F;classes/CheckBoxTreeView.html">CheckBoxTreeView</a></li>
+            
+                <li><a href="..&#x2F;classes/TreeNode.html">TreeNode</a></li>
+            
+                <li><a href="..&#x2F;classes/TreeView.html">TreeView</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+				</div>
+		</div>
+		<!-- Side bar end -->
+
+		<!-- Main content begin -->
+		<div class="yui3-u-3-4 print-max-width">
+			    <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+			<div class="apidocs">
+				<div id="docs-main">
+					<div class="content">
+						<h1 class="file-heading">File: js&#x2F;TreeView.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+
+	var getClassName = Y.ClassNameManager.getClassName,
+		BOUNDING_BOX = &quot;boundingBox&quot;,
+		CONTENT_BOX = &quot;contentBox&quot;,
+		TREEVIEW = &quot;treeview&quot;,
+		TREENODE = &quot;treenode&quot;,
+		CHECKBOXTREEVIEW = &quot;checkboxtreeview&quot;,
+		CHECKBOXTREENODE = &quot;checkboxtreenode&quot;,
+		classNames = {
+			tree : getClassName(TREENODE),
+			content : getClassName(TREENODE, &quot;content&quot;),
+			label : getClassName(TREENODE, &quot;label&quot;),
+			labelContent : getClassName(TREENODE, &quot;label-content&quot;),
+			toggle : getClassName(TREENODE, &quot;toggle-control&quot;),
+			collapsed : getClassName(TREENODE, &quot;collapsed&quot;),
+			leaf : getClassName(TREENODE, &quot;leaf&quot;),
+			lastnode : getClassName(TREENODE, &quot;last&quot;),
+			checkbox : getClassName(CHECKBOXTREENODE, &quot;checkbox&quot;)
+		},
+		checkStates = { &#x2F;&#x2F; Check states for checkbox tree
+			unchecked: 10,
+			halfchecked: 20,
+			checked: 30
+		},
+		checkStatesClasses = {
+			10 : getClassName(CHECKBOXTREENODE, &quot;checkbox-unchecked&quot;),
+			20 : getClassName(CHECKBOXTREENODE, &quot;checkbox-halfchecked&quot;),
+			30 : getClassName(CHECKBOXTREENODE, &quot;checkbox-checked&quot;)
+		},
+		findChildren;
+
+&#x2F;*
+ * Used in HTML_PARSERs to find children of the current widget
+ *&#x2F;
+	findChildren = function (srcNode, selector) {
+		var descendants = srcNode.all(selector),
+			children = Array(),
+			child;
+			
+			descendants.each(function(node) {
+				child = {
+					srcNode : node,
+					boundingBox : node,
+					contentBox : node.one(&quot;&gt; ul&quot;)
+				};
+				children.push(child);
+			});
+			return children;
+	};
+
+&#x2F;**
+ * TreeView widget. Provides a tree style widget, with a hierachical representation of it&#x27;s components.
+ * It extends WidgetParent and WidgetChild, please refer to it&#x27;s documentation for more info.   
+ * This widget represents the root cotainer for TreeNode objects that build the actual tree structure. 
+ * Therefore this widget will not usually have any visual representation. Its also responsible for handling node events.
+ * @class TreeView
+ * @constructor
+ * @uses WidgetParent
+ * @extends Widget
+ * @param {Object} config User configuration object.
+ *&#x2F;
+	Y.TreeView = Y.Base.create(TREEVIEW, Y.Widget, [Y.WidgetParent], {
+
+		CONTENT_TEMPLATE :  &quot;&lt;ul&gt;&lt;&#x2F;ul&gt;&quot;,
+
+		initializer : function (config) {
+			&#x2F;**
+			 * Fires when node is expanded &#x2F; collapsed
+			 * @event nodeToggle
+			 * @param {TreeNode} treenode tree node that is expanding &#x2F; collapsing.
+			 * Use this event to listed for nodes being clicked. 
+			 *&#x2F;
+			this.publish(&quot;nodeToggle&quot;, {
+				defaultFn: this._nodeToggleDefaultFn
+			});
+			
+			&#x2F;**
+			 * Fires when node is collapsed
+			 * @event nodeCollapse
+			 * @param {TreeNode} treenode tree node that is collapsing
+			 *&#x2F;
+			this.publish(&quot;nodeCollapse&quot;, {
+				defaultFn: this._nodeCollapseDefaultFn
+			});
+			
+			&#x2F;**
+			 * Fires when node is expanded
+			 * @event nodeExpand
+			 * @param {TreeNode} treenode tree node that is expanding
+			 *&#x2F;
+			this.publish(&quot;nodeExpand&quot;, {
+				defaultFn: this._nodeExpandDefaultFn
+			});
+			
+			&#x2F;**
+			 * Fires when node is clicked
+			 * @event nodeClick
+			 * @param {TreeNode} treenode tree node that is being clicked
+			 *&#x2F;
+			this.publish(&quot;nodeClick&quot;, {
+				defaultFn: this._nodeClickDefaultFn
+			});
+		},
+
+		&#x2F;**
+			* Default event handler for &quot;nodeclick&quot; event
+			* @method _nodeClickDefaultFn
+			* @protected
+			*&#x2F;
+		_nodeClickDefaultFn: function(e) {
+		},
+
+		&#x2F;**
+			* Default event handler for &quot;toggleTreeState&quot; event
+			* @method _nodeToggleDefaultFn
+			* @protected
+			*&#x2F;
+		_nodeToggleDefaultFn: function(e) {
+			if (e.treenode.get(&quot;collapsed&quot;)) {
+				this.fire(&quot;nodeExpand&quot;, {treenode: e.treenode});
+			} else {
+				this.fire(&quot;nodeCollapse&quot;, {treenode: e.treenode});
+			}
+		},
+
+		&#x2F;**
+			* Default event handler for &quot;collapse&quot; event
+			* @method _nodeCollapseDefaultFn
+			* @protected
+			*&#x2F;
+		_nodeCollapseDefaultFn: function(e) {
+			e.treenode.collapse();
+		},
+
+		&#x2F;**
+			* Default event handler for &quot;expand&quot; event
+			* @method _expandStateDefaultFn
+			* @protected
+			*&#x2F;
+		_nodeExpandDefaultFn: function(e) {
+			e.treenode.expand();
+		},
+
+		&#x2F;**
+		 * Sets child event handlers
+		 * @method _setChildEventHandlers
+		 * @protected
+		 *&#x2F;
+		_setChildEventHandlers : function () {
+			var parent;
+			this.after(&quot;addChild&quot;, function(e) {
+				parent = e.child.get(&quot;parent&quot;);
+				if (e.child.get(&quot;isLast&quot;) &amp;&amp; parent.size() &gt; 1) {
+					parent.item(e.child.get(&quot;index&quot;)-1)._unmarkLast();
+				}
+			});
+			
+			this.on(&quot;removeChild&quot;, function(e) {
+				parent = e.child.get(&quot;parent&quot;);
+				if ((parent.size() == 1) || e.child.get(&quot;index&quot;) === 0) {
+					return;
+				}
+				if (e.child.get(&quot;isLast&quot;)) {
+					parent.item(e.child.get(&quot;index&quot;)-1)._markLast();
+				}
+			});
+		},
+		
+		&#x2F;**
+			* Handles internal tree click events
+			* @method _onClickEvents
+			* @protected
+			*&#x2F;
+		_onClickEvents : function (event) {
+			var target = event.target,
+				twidget = Y.Widget.getByNode(target),
+				toggle = false;
+			
+			event.preventDefault();
+			
+			twidget = Y.Widget.getByNode(target);
+			if (!twidget instanceof Y.TreeNode) {
+				return;
+			}
+			if (twidget.get(&quot;isLeaf&quot;)) {
+				return;
+			}
+			
+			Y.Array.each(target.get(&quot;className&quot;).split(&quot; &quot;), function(className) {
+				switch (className) {
+					case classNames.toggle:
+						toggle = true;
+						break;
+					case classNames.labelContent:
+						if (this.get(&quot;toggleOnLabelClick&quot;)) {
+							toggle = true;
+						}
+						break;
+				}
+			}, this);
+
+			if (toggle) {
+				this.fire(&quot;nodeToggle&quot;, {treenode: twidget});
+			}
+		},
+		
+		&#x2F;**
+		 * Handles internal tree keyboard interaction
+		 * @method _onKeyEvents
+		 * @protected
+		 *&#x2F;
+		_onKeyEvents : function (event) {
+			var target = event.target,
+				twidget = Y.Widget.getByNode(target),
+				keycode = event.keyCode,
+				collapsed = twidget.get(&quot;collapsed&quot;);
+				
+			if (twidget.get(&quot;isLeaf&quot;)) {
+				return;
+			}
+			
+			if ( ((keycode == 39) &amp;&amp; collapsed) || ((keycode == 37) &amp;&amp; !collapsed) ) {
+				this.fire(&quot;nodeToggle&quot;, {treenode: twidget});
+			}			   
+		},
+							   
+        bindUI : function() {
+            var boundingBox = this.get(BOUNDING_BOX);
+			boundingBox.on(&quot;click&quot;, this._onClickEvents, this);
+			boundingBox.on(&quot;keypress&quot;, this._onKeyEvents, this);
+
+			boundingBox.delegate(&quot;click&quot;, Y.bind(function(e) {
+				var twidget = Y.Widget.getByNode(e.target);
+				if (twidget instanceof Y.TreeNode) {
+					this.fire(&quot;nodeclick&quot;, {treenode: twidget});
+				}
+			}, this), &quot;.&quot;+classNames.label);
+			
+			this._setChildEventHandlers();
+			
+			boundingBox.plug(Y.Plugin.NodeFocusManager, {
+				descendants: &quot;.yui3-treenode-label&quot;,
+				keys: {
+					next: &quot;down:40&quot;,    &#x2F;&#x2F; Down arrow
+					previous: &quot;down:38&quot; &#x2F;&#x2F; Up arrow 
+				},
+				circular: false
+			});
+		}
+
+	}, {
+		
+		NAME : TREEVIEW,
+		ATTRS : {
+			&#x2F;**
+			 * @attribute defaultChildType
+			 * @type String
+			 * @readOnly
+			 * @description default child type definition
+			 *&#x2F;
+			defaultChildType : {  
+				value: &quot;TreeNode&quot;,
+				readOnly: true
+			},
+			&#x2F;**
+			 * @attribute toggleOnLabelClick
+			 * @type Boolean
+			 * @description whether to toogle tree state on label clicks with addition to toggle control clicks
+			 *&#x2F;
+			toggleOnLabelClick : {
+				value: true,
+				validator: Y.Lang.isBoolean
+			},
+			&#x2F;**
+			 * @attribute startCollapsed
+			 * @type Boolean
+			 * @description Whether to render tree nodes expanded or collapsed by default
+			 *&#x2F;
+			startCollapsed : {
+				value: true,
+				validator: Y.Lang.isBoolean
+			},
+			&#x2F;**
+			 * @attribute loadOnDemand
+			 * @type boolean
+			 *
+			 * @description Whether children of this node can be loaded on demand
+			 * (when this tree node is expanded, for example).
+			 * Use with gallery-yui3treeview-ng-datasource.
+			 *&#x2F;
+			loadOnDemand : {
+				value: false,
+				validator: Y.Lang.isBoolean
+			}
+		},
+		HTML_PARSER : {
+			children : function (srcNode) {
+				return findChildren(srcNode, &quot;&gt; li&quot;);
+			}
+		}
+	});
+
+&#x2F;**
+ * TreeNode widget. Provides a tree style node widget.
+ * It extends WidgetParent and WidgetChild, please refer to it&#x27;s documentation for more info.   
+ * @class TreeNode
+ * @constructor
+ * @uses WidgetParent, WidgetChild
+ * @extends Widget
+ * @param {Object} config User configuration object.
+ *&#x2F;
+	Y.TreeNode = Y.Base.create(TREENODE, Y.Widget, [Y.WidgetParent, Y.WidgetChild], {
+
+		&#x2F;**
+		 * Flag to determine if the tree is being rendered from markup or not
+		 * @property _renderFromMarkup
+		 * @protected
+		 *&#x2F;
+		_renderFromMarkup : false,
+
+		CONTENT_TEMPLATE :  &quot;&lt;ul&gt;&lt;&#x2F;ul&gt;&quot;,
+		
+		BOUNDING_TEMPLATE : &quot;&lt;li&gt;&lt;&#x2F;li&gt;&quot;,
+								
+		TREENODELABEL_TEMPLATE : &quot;&lt;a class={labelClassName} role=&#x27;treeitem&#x27; href=&#x27;#&#x27;&gt;&lt;&#x2F;a&gt;&quot;,
+		TREENODELABELCONTENT_TEMPLATE : &quot;&lt;span class={labelContentClassName}&gt;{label}&lt;&#x2F;span&gt;&quot;,
+		
+		TOGGLECONTROL_TEMPLATE : &quot;&lt;span class={toggleClassName}&gt;&lt;&#x2F;span&gt;&quot;,
+
+		bindUI : function() {
+			&#x2F;&#x2F; Both TreeVew and TreeNode share the same child event handling
+			Y.TreeView.prototype._setChildEventHandlers.apply(this, arguments);
+		},
+		
+		&#x2F;**
+		 * Renders TreeNode
+		 * @method renderUI
+		 * @protected
+		*&#x2F;
+		renderUI : function() {
+			var boundingBox = this.get(BOUNDING_BOX),
+                treeLabel,
+				treeLabelHTML,
+				labelContent,
+				labelContentHTML,
+				toggleControlHTML,
+				label,
+				isLeaf;
+				
+			toggleControlHTML = Y.substitute(this.TOGGLECONTROL_TEMPLATE,{toggleClassName: classNames.toggle});
+			isLeaf = this.get(&quot;isLeaf&quot;);
+			
+			if (this._renderFromMarkup) {
+				treeLabel = boundingBox.one(&quot;:first-child&quot;);
+				treeLabel.set(&quot;role&quot;, &quot;treeitem&quot;);
+				treeLabel.addClass(classNames.label);
+				labelContent = treeLabel.removeChild(treeLabel.one(&quot;:first-child&quot;));
+				labelContent.addClass(classNames.labelContent);
+			} else {
+				label = this.get(&quot;label&quot;);
+
+				treeLabelHTML = Y.substitute(this.TREENODELABEL_TEMPLATE, {labelClassName: classNames.label});
+				labelContentHTML = Y.substitute(this.TREENODELABELCONTENT_TEMPLATE, {labelContentClassName: classNames.labelContent, label: label});
+				labelContent = labelContentHTML;
+				
+				treeLabel = Y.Node.create(treeLabelHTML);
+				boundingBox.prepend(treeLabel);
+			}
+
+			if (!isLeaf) {
+				treeLabel.appendChild(toggleControlHTML).appendChild(labelContent);
+			} else {
+				treeLabel.append(labelContent);
+			}
+
+			boundingBox.set(&quot;role&quot;,&quot;presentation&quot;);
+
+			if (!isLeaf) {
+				if (this.get(&quot;root&quot;).get(&quot;startCollapsed&quot;)) {
+					boundingBox.addClass(classNames.collapsed);   
+				} else {
+					if (this.size() === 0) { &#x2F;&#x2F; Nodes (not leafs) without children should start in collapsed mode
+						boundingBox.addClass(classNames.collapsed);   
+					}
+				}
+			}
+
+			if (isLeaf) {
+				boundingBox.addClass(classNames.leaf);
+			}
+			
+			if (this.get(&quot;isLast&quot;)) {
+				this._markLast();
+			}
+		},
+
+		&#x2F;**
+		 * Marks this node as the last one in list
+		 * @method _markLast
+		 * @protected
+		 *&#x2F;
+		_markLast : function() {
+			this.get(BOUNDING_BOX).addClass(classNames.lastnode);
+		},
+
+		&#x2F;**
+		 * Unmarks this node as the last one in list
+		 * @method _markLast
+		 * @protected
+		 *&#x2F;
+		_unmarkLast : function() {
+			this.get(BOUNDING_BOX).removeClass(classNames.lastnode);
+		},
+		
+		&#x2F;**
+		 * Collapse the tree
+		 * @method collapse
+		 *&#x2F;
+		collapse : function () {
+			var boundingBox = this.get(BOUNDING_BOX);
+			if (!boundingBox.hasClass(classNames.collapsed)) {
+				boundingBox.toggleClass(classNames.collapsed);
+			}
+		},
+
+		&#x2F;**
+		 * Expands the tree
+		 * @method expand
+		 *&#x2F;
+		expand : function () {
+			var boundingBox = this.get(BOUNDING_BOX);
+			if (boundingBox.hasClass(classNames.collapsed)) {
+				boundingBox.toggleClass(classNames.collapsed);
+			}
+		},
+
+		&#x2F;**
+		 * Toggle current expaned&#x2F;collapsed tree state
+		 * @method toggleState
+		 *&#x2F;
+        toggleState : function () {
+			this.get(BOUNDING_BOX).toggleClass(classNames.collapsed);
+		},
+
+		&#x2F;**
+		 * Returns breadcrumbs path of labels from root of the tree to this node (inclusive)
+		 * @method path
+		 * @param cfg {Object} An object literal with the following properties:
+		 *     &lt;dl&gt;
+		 *     &lt;dt&gt;&lt;code&gt;labelAttr&lt;&#x2F;code&gt;&lt;&#x2F;dt&gt;
+		 *     &lt;dd&gt;Attribute name to use for node representation. Can be any attribute of TreeNode&lt;&#x2F;dd&gt;
+		 *     &lt;dt&gt;&lt;code&gt;reverse&lt;&#x2F;code&gt;&lt;&#x2F;dt&gt;
+		 *     &lt;dd&gt;Return breadcrumbs from the node to root instead of root to the node&lt;&#x2F;dd&gt;
+		 *     &lt;&#x2F;dl&gt;
+		 * @return {Array} array of node labels
+		 *&#x2F;
+		path : function(cfg) {
+			var bc = Array(),
+				node = this;
+			if (!cfg) {
+				cfg = {};
+			}
+			if (!cfg.labelAttr) {
+				cfg.labelAttr = &quot;label&quot;;
+			}
+			while (node &amp;&amp; (node instanceof Y.TreeNode) ) {
+				bc.unshift(node.get(cfg.labelAttr));
+				node = node.get(&quot;parent&quot;);
+			}
+			if (cfg.reverse) {
+				bc = bc.reverse();
+			}
+			return bc;
+		},
+
+		&#x2F;**
+		 * Returns toggle control node
+		 * @method _getToggleControlNode
+		 * @protected
+		 *&#x2F;
+		_getToggleControlNode : function() {
+			return this.get(BOUNDING_BOX).one(&quot;.&quot; + classNames.toggle);
+		},
+			
+		&#x2F;**
+		 * Returns label content node
+		 * @method _getLabelContentNode
+		 * @protected
+		 *&#x2F;
+		_getLabelContentNode : function() {
+			return this.get(BOUNDING_BOX).one(&quot;.&quot; + classNames.labelContent);
+		}
+
+    }, { 
+		NAME : TREENODE,
+		ATTRS : {
+			&#x2F;**
+			 * @attribute defaultChildType
+			 * @type String
+			 * @readOnly
+			 * @description default child type definition
+			 *&#x2F;
+			defaultChildType : {  
+				value: &quot;TreeNode&quot;,
+				readOnly: true
+			},
+			&#x2F;**
+			 * @attribute label
+			 * @type String
+			 *
+			 * @description TreeNode node label 
+			 *&#x2F;
+			label : {
+				validator: Y.Lang.isString,
+				value: &quot;&quot;
+			},
+			&#x2F;**
+			 * @attribute loadOnDemand
+			 * @type boolean
+			 *
+			 * @description Whether children of this node can be loaded on demand
+			 * (when this tree node is expanded, for example).
+			 * Use with gallery-yui3treeview-ng-datasource.
+			 *&#x2F;
+			loadOnDemand : {
+				value: false,
+				validator: Y.Lang.isBoolean
+			},
+			&#x2F;**
+			 * @attribute collapsed
+			 * @type Boolean
+			 * @readOnly
+			 *
+			 * @description Represents current treenode state - whether its collapsed or extended
+			 *&#x2F;
+			collapsed : {
+				value: null,
+				getter: function() {
+					return this.get(BOUNDING_BOX).hasClass(classNames.collapsed);
+				},
+				readOnly: true
+			},
+			&#x2F;**
+			 * @attribute clabel
+			 * @type String
+			 *
+			 * @description Canonical label for the node. 
+			 * You can set it to anything you like and use later with your external tools.
+			 *&#x2F;
+			clabel : {
+				value: &quot;&quot;,
+				validator: Y.Lang.isString
+			},
+			&#x2F;**
+			 * @attribute nodeId
+			 * @type String
+			 *
+			 * @description Signifies id of this node.
+			 * You can set it to anything you like and use later with your external tools.
+			 *&#x2F;
+			nodeId : {
+				value: &quot;&quot;,
+				validator: Y.Lang.isString
+			},
+			&#x2F;**
+			 * @attribute isLeaf
+			 * @type Boolean
+			 *
+			 * @description Signifies whether this node is a leaf node.
+			 * Nodes with loadOnDemand set to true are not considered leafs.
+			 *&#x2F;
+			isLeaf : {
+				value: null,
+				getter: function() {
+					return (this.size() &gt; 0 ? false : true) &amp;&amp; (!this.get(&quot;loadOnDemand&quot;));
+				},
+				readOnly: true
+			},
+			&#x2F;**
+			 * @attribute isLast
+			 * @type Boolean
+			 *
+			 * @description Signifies whether this node is the last child of its parent.
+			 *&#x2F;
+			isLast : {
+				value: null,
+				getter: function() {
+					return (this.get(&quot;index&quot;) + 1 == this.get(&quot;parent&quot;).size());
+				},
+				readOnly: true
+			}
+		},
+		HTML_PARSER: {
+			children : function (srcNode) {
+				return findChildren(srcNode, &quot;&gt; ul &gt; li&quot;);
+			},
+			
+			label : function(srcNode) {
+				var labelContentNode = srcNode.one(&quot;&gt; a &gt; span&quot;);
+				if (labelContentNode !== null) {
+					this._renderFromMarkup = true;
+					return labelContentNode.getContent();
+				}
+			}
+		}
+	});
+
+    </pre>
+</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Main content end -->
+    </div>
+</div>
+
+<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="..&#x2F;assets/js/yui-prettify.js"></script>
+<script src="..&#x2F;assets/../api.js"></script>
+<script src="..&#x2F;assets/js/api-filter.js"></script>
+<script src="..&#x2F;assets/js/api-list.js"></script>
+<script src="..&#x2F;assets/js/api-search.js"></script>
+<script src="..&#x2F;assets/js/apidocs.js"></script>
+</body>
+</html>

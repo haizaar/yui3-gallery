@@ -1,0 +1,640 @@
+{
+    "project": {
+        "name": "TreeView",
+        "description": "TreeView API"
+    },
+    "files": {
+        "js/CheckBoxTreeView.js": {
+            "name": "js/CheckBoxTreeView.js",
+            "modules": {},
+            "classes": {
+                "CheckBoxTreeView": 1,
+                "CheckBoxTreeNode": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "js/TreeView.js": {
+            "name": "js/TreeView.js",
+            "modules": {},
+            "classes": {
+                "TreeView": 1,
+                "TreeNode": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {
+        "CheckBoxTreeView": {
+            "name": "CheckBoxTreeView",
+            "shortname": "CheckBoxTreeView",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "js/CheckBoxTreeView.js",
+            "line": 2,
+            "description": "CheckBoxTreeView widget. Extrends TreeView widget to support relevant events and methods od checkbox tree.\nThis widget represents the root cotainer for CheckBoxTreeNode objects that build the actual tree structure. \nTherefore this widget will not usually have any visual representation. Its also responsible for handling node events.",
+            "is_constructor": 1,
+            "extends": "TreeView",
+            "params": [
+                {
+                    "name": "config",
+                    "description": "User configuration object.",
+                    "type": "Object"
+                }
+            ]
+        },
+        "CheckBoxTreeNode": {
+            "name": "CheckBoxTreeNode",
+            "shortname": "CheckBoxTreeNode",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "js/CheckBoxTreeView.js",
+            "line": 164,
+            "description": "CheckBoxTreeNode widget. Provides a tree style node widget with checkbox\nIt extends Y.TreeNode, please refer to it's documentation for more info.",
+            "is_constructor": 1,
+            "extends": "TreeNode",
+            "params": [
+                {
+                    "name": "config",
+                    "description": "User configuration object.",
+                    "type": "Object"
+                }
+            ]
+        },
+        "TreeView": {
+            "name": "TreeView",
+            "shortname": "TreeView",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "js/TreeView.js",
+            "line": 51,
+            "description": "TreeView widget. Provides a tree style widget, with a hierachical representation of it's components.\nIt extends WidgetParent and WidgetChild, please refer to it's documentation for more info.   \nThis widget represents the root cotainer for TreeNode objects that build the actual tree structure. \nTherefore this widget will not usually have any visual representation. Its also responsible for handling node events.",
+            "is_constructor": 1,
+            "uses": [
+                "WidgetParent"
+            ],
+            "extends": "Widget",
+            "params": [
+                {
+                    "name": "config",
+                    "description": "User configuration object.",
+                    "type": "Object"
+                }
+            ]
+        },
+        "TreeNode": {
+            "name": "TreeNode",
+            "shortname": "TreeNode",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "js/TreeView.js",
+            "line": 303,
+            "description": "TreeNode widget. Provides a tree style node widget.\nIt extends WidgetParent and WidgetChild, please refer to it's documentation for more info.",
+            "is_constructor": 1,
+            "uses": [
+                "WidgetParent",
+                "WidgetChild"
+            ],
+            "extends": "Widget",
+            "params": [
+                {
+                    "name": "config",
+                    "description": "User configuration object.",
+                    "type": "Object"
+                }
+            ]
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/CheckBoxTreeView.js",
+            "line": 14,
+            "description": "Fires when node checkbox state is changed",
+            "itemtype": "event",
+            "name": "check",
+            "params": [
+                {
+                    "name": "treenode",
+                    "description": "tree node that is checked",
+                    "type": "TreeNode"
+                }
+            ],
+            "class": "CheckBoxTreeView"
+        },
+        {
+            "file": "js/CheckBoxTreeView.js",
+            "line": 24,
+            "description": "Default event handler for \"check\" event",
+            "itemtype": "method",
+            "name": "_nodeClickDefaultFn",
+            "access": "protected",
+            "tagname": "",
+            "class": "CheckBoxTreeView"
+        },
+        {
+            "file": "js/CheckBoxTreeView.js",
+            "line": 76,
+            "description": "Returns the list of nodes that are roots of checked subtrees",
+            "itemtype": "method",
+            "name": "getChecked",
+            "return": {
+                "description": "array of tree nodes",
+                "type": "Array"
+            },
+            "class": "CheckBoxTreeView"
+        },
+        {
+            "file": "js/CheckBoxTreeView.js",
+            "line": 110,
+            "description": "Returns list of pathes (breadcrumbs) of nodes that are roots of checked subtrees",
+            "itemtype": "method",
+            "name": "getCheckedPaths",
+            "params": [
+                {
+                    "name": "cfg",
+                    "description": "An object literal with the following properties:\n    <dl>\n    <dt><code>labelAttr</code></dt>\n    <dd>Attribute name to use for node representation. Can be any attribute of TreeNode</dd>\n    <dt><code>reverse</code></dt>\n    <dd>Return breadcrumbs from the node to root instead of root to the node</dd>\n    </dl>",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "array of node label arrays",
+                "type": "Array"
+            },
+            "class": "CheckBoxTreeView"
+        },
+        {
+            "file": "js/CheckBoxTreeView.js",
+            "line": 142,
+            "itemtype": "attribute",
+            "name": "defaultChildType",
+            "type": "String",
+            "readonly": "",
+            "description": "default child type definition",
+            "class": "CheckBoxTreeView"
+        },
+        {
+            "file": "js/CheckBoxTreeView.js",
+            "line": 152,
+            "itemtype": "attribute",
+            "name": "checkOnLabelClick",
+            "type": "Boolean",
+            "description": "Whether to change node checked state on label clicks with addition to checkbox control clicks",
+            "class": "CheckBoxTreeView"
+        },
+        {
+            "file": "js/CheckBoxTreeView.js",
+            "line": 181,
+            "description": "Default handler for childCheckedSateChange. Updates this parent state\nto match current children states.",
+            "itemtype": "method",
+            "name": "_childCheckedSateChangeDefaultFn",
+            "access": "protected",
+            "tagname": "",
+            "class": "CheckBoxTreeNode"
+        },
+        {
+            "file": "js/CheckBoxTreeView.js",
+            "line": 220,
+            "description": "Event handler that updates UI according to checked attribute change",
+            "itemtype": "method",
+            "name": "_onCheckedChange",
+            "access": "protected",
+            "tagname": "",
+            "class": "CheckBoxTreeNode"
+        },
+        {
+            "file": "js/CheckBoxTreeView.js",
+            "line": 230,
+            "description": "Synchronize CSS classes to conform to checked state",
+            "itemtype": "method",
+            "name": "_updateCheckedStateUI",
+            "access": "protected",
+            "tagname": "",
+            "class": "CheckBoxTreeNode"
+        },
+        {
+            "file": "js/CheckBoxTreeView.js",
+            "line": 241,
+            "description": "Returns checkbox node",
+            "itemtype": "method",
+            "name": "_getCheckBoxNode",
+            "access": "protected",
+            "tagname": "",
+            "class": "CheckBoxTreeNode"
+        },
+        {
+            "file": "js/CheckBoxTreeView.js",
+            "line": 279,
+            "description": "Toggles checked / unchecked state of the node",
+            "itemtype": "method",
+            "name": "toggleCheckedState",
+            "class": "CheckBoxTreeNode"
+        },
+        {
+            "file": "js/CheckBoxTreeView.js",
+            "line": 292,
+            "description": "Sets this node as checked and propagates to children",
+            "itemtype": "method",
+            "name": "_check",
+            "access": "protected",
+            "tagname": "",
+            "class": "CheckBoxTreeNode"
+        },
+        {
+            "file": "js/CheckBoxTreeView.js",
+            "line": 304,
+            "description": "Set this node as unchecked and propagates to children",
+            "itemtype": "method",
+            "name": "_uncheck",
+            "access": "protected",
+            "tagname": "",
+            "class": "CheckBoxTreeNode"
+        },
+        {
+            "file": "js/CheckBoxTreeView.js",
+            "line": 316,
+            "description": "Synchronizes children states to match the state of the current node",
+            "itemtype": "method",
+            "name": "_uncheck",
+            "access": "protected",
+            "tagname": "",
+            "class": "CheckBoxTreeNode"
+        },
+        {
+            "file": "js/CheckBoxTreeView.js",
+            "line": 336,
+            "itemtype": "attribute",
+            "name": "defaultChildType",
+            "type": "String",
+            "readonly": "",
+            "description": "default child type definition",
+            "class": "CheckBoxTreeNode"
+        },
+        {
+            "file": "js/CheckBoxTreeView.js",
+            "line": 346,
+            "itemtype": "attribute",
+            "name": "checked",
+            "type": "{String|Number}",
+            "description": "Signifies current \"checked\" state. Accepts either <code>unchecked</code>, <code>halfchecked</code>, <code>checked</code>.\nor correspondingly 10, 20, 30. Getter returns only numeric value.",
+            "class": "CheckBoxTreeNode"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 67,
+            "description": "Fires when node is expanded / collapsed",
+            "itemtype": "event",
+            "name": "nodeToggle",
+            "params": [
+                {
+                    "name": "treenode",
+                    "description": "tree node that is expanding / collapsing.\nUse this event to listed for nodes being clicked.",
+                    "type": "TreeNode"
+                }
+            ],
+            "class": "TreeView"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 77,
+            "description": "Fires when node is collapsed",
+            "itemtype": "event",
+            "name": "nodeCollapse",
+            "params": [
+                {
+                    "name": "treenode",
+                    "description": "tree node that is collapsing",
+                    "type": "TreeNode"
+                }
+            ],
+            "class": "TreeView"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 86,
+            "description": "Fires when node is expanded",
+            "itemtype": "event",
+            "name": "nodeExpand",
+            "params": [
+                {
+                    "name": "treenode",
+                    "description": "tree node that is expanding",
+                    "type": "TreeNode"
+                }
+            ],
+            "class": "TreeView"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 95,
+            "description": "Fires when node is clicked",
+            "itemtype": "event",
+            "name": "nodeClick",
+            "params": [
+                {
+                    "name": "treenode",
+                    "description": "tree node that is being clicked",
+                    "type": "TreeNode"
+                }
+            ],
+            "class": "TreeView"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 105,
+            "description": "Default event handler for \"nodeclick\" event",
+            "itemtype": "method",
+            "name": "_nodeClickDefaultFn",
+            "access": "protected",
+            "tagname": "",
+            "class": "TreeView"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 113,
+            "description": "Default event handler for \"toggleTreeState\" event",
+            "itemtype": "method",
+            "name": "_nodeToggleDefaultFn",
+            "access": "protected",
+            "tagname": "",
+            "class": "TreeView"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 126,
+            "description": "Default event handler for \"collapse\" event",
+            "itemtype": "method",
+            "name": "_nodeCollapseDefaultFn",
+            "access": "protected",
+            "tagname": "",
+            "class": "TreeView"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 135,
+            "description": "Default event handler for \"expand\" event",
+            "itemtype": "method",
+            "name": "_expandStateDefaultFn",
+            "access": "protected",
+            "tagname": "",
+            "class": "TreeView"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 144,
+            "description": "Sets child event handlers",
+            "itemtype": "method",
+            "name": "_setChildEventHandlers",
+            "access": "protected",
+            "tagname": "",
+            "class": "TreeView"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 169,
+            "description": "Handles internal tree click events",
+            "itemtype": "method",
+            "name": "_onClickEvents",
+            "access": "protected",
+            "tagname": "",
+            "class": "TreeView"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 207,
+            "description": "Handles internal tree keyboard interaction",
+            "itemtype": "method",
+            "name": "_onKeyEvents",
+            "access": "protected",
+            "tagname": "",
+            "class": "TreeView"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 255,
+            "itemtype": "attribute",
+            "name": "defaultChildType",
+            "type": "String",
+            "readonly": "",
+            "description": "default child type definition",
+            "class": "TreeView"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 265,
+            "itemtype": "attribute",
+            "name": "toggleOnLabelClick",
+            "type": "Boolean",
+            "description": "whether to toogle tree state on label clicks with addition to toggle control clicks",
+            "class": "TreeView"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 274,
+            "itemtype": "attribute",
+            "name": "startCollapsed",
+            "type": "Boolean",
+            "description": "Whether to render tree nodes expanded or collapsed by default",
+            "class": "TreeView"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 283,
+            "itemtype": "attribute",
+            "name": "loadOnDemand",
+            "type": "boolean",
+            "description": "Whether children of this node can be loaded on demand\n(when this tree node is expanded, for example).\nUse with gallery-yui3treeview-ng-datasource.",
+            "class": "TreeView"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 314,
+            "description": "Flag to determine if the tree is being rendered from markup or not",
+            "itemtype": "property",
+            "name": "_renderFromMarkup",
+            "access": "protected",
+            "tagname": "",
+            "class": "TreeNode"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 335,
+            "description": "Renders TreeNode",
+            "itemtype": "method",
+            "name": "renderUI",
+            "access": "protected",
+            "tagname": "",
+            "class": "TreeNode"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 397,
+            "description": "Marks this node as the last one in list",
+            "itemtype": "method",
+            "name": "_markLast",
+            "access": "protected",
+            "tagname": "",
+            "class": "TreeNode"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 406,
+            "description": "Unmarks this node as the last one in list",
+            "itemtype": "method",
+            "name": "_markLast",
+            "access": "protected",
+            "tagname": "",
+            "class": "TreeNode"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 415,
+            "description": "Collapse the tree",
+            "itemtype": "method",
+            "name": "collapse",
+            "class": "TreeNode"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 426,
+            "description": "Expands the tree",
+            "itemtype": "method",
+            "name": "expand",
+            "class": "TreeNode"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 437,
+            "description": "Toggle current expaned/collapsed tree state",
+            "itemtype": "method",
+            "name": "toggleState",
+            "class": "TreeNode"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 445,
+            "description": "Returns breadcrumbs path of labels from root of the tree to this node (inclusive)",
+            "itemtype": "method",
+            "name": "path",
+            "params": [
+                {
+                    "name": "cfg",
+                    "description": "An object literal with the following properties:\n    <dl>\n    <dt><code>labelAttr</code></dt>\n    <dd>Attribute name to use for node representation. Can be any attribute of TreeNode</dd>\n    <dt><code>reverse</code></dt>\n    <dd>Return breadcrumbs from the node to root instead of root to the node</dd>\n    </dl>",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "array of node labels",
+                "type": "Array"
+            },
+            "class": "TreeNode"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 476,
+            "description": "Returns toggle control node",
+            "itemtype": "method",
+            "name": "_getToggleControlNode",
+            "access": "protected",
+            "tagname": "",
+            "class": "TreeNode"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 485,
+            "description": "Returns label content node",
+            "itemtype": "method",
+            "name": "_getLabelContentNode",
+            "access": "protected",
+            "tagname": "",
+            "class": "TreeNode"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 497,
+            "itemtype": "attribute",
+            "name": "defaultChildType",
+            "type": "String",
+            "readonly": "",
+            "description": "default child type definition",
+            "class": "TreeNode"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 507,
+            "itemtype": "attribute",
+            "name": "label",
+            "type": "String",
+            "description": "TreeNode node label",
+            "class": "TreeNode"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 517,
+            "itemtype": "attribute",
+            "name": "loadOnDemand",
+            "type": "boolean",
+            "description": "Whether children of this node can be loaded on demand\n(when this tree node is expanded, for example).\nUse with gallery-yui3treeview-ng-datasource.",
+            "class": "TreeNode"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 529,
+            "itemtype": "attribute",
+            "name": "collapsed",
+            "type": "Boolean",
+            "readonly": "",
+            "description": "Represents current treenode state - whether its collapsed or extended",
+            "class": "TreeNode"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 543,
+            "itemtype": "attribute",
+            "name": "clabel",
+            "type": "String",
+            "description": "Canonical label for the node. \nYou can set it to anything you like and use later with your external tools.",
+            "class": "TreeNode"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 554,
+            "itemtype": "attribute",
+            "name": "nodeId",
+            "type": "String",
+            "description": "Signifies id of this node.\nYou can set it to anything you like and use later with your external tools.",
+            "class": "TreeNode"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 565,
+            "itemtype": "attribute",
+            "name": "isLeaf",
+            "type": "Boolean",
+            "description": "Signifies whether this node is a leaf node.\nNodes with loadOnDemand set to true are not considered leafs.",
+            "class": "TreeNode"
+        },
+        {
+            "file": "js/TreeView.js",
+            "line": 579,
+            "itemtype": "attribute",
+            "name": "isLast",
+            "type": "Boolean",
+            "description": "Signifies whether this node is the last child of its parent.",
+            "class": "TreeNode"
+        }
+    ]
+}
