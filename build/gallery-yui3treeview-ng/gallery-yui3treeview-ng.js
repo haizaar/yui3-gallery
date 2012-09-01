@@ -55,7 +55,7 @@ YUI.add('gallery-yui3treeview-ng', function(Y) {
  * It extends WidgetParent and WidgetChild, please refer to it's documentation for more info.   
  * This widget represents the root cotainer for TreeNode objects that build the actual tree structure. 
  * Therefore this widget will not usually have any visual representation. Its also responsible for handling node events.
- * @class TreeNode
+ * @class TreeView
  * @constructor
  * @uses WidgetParent
  * @extends Widget
@@ -688,7 +688,7 @@ YUI.add('gallery-yui3treeview-ng', function(Y) {
 		
 		/**
 		 * Returns list of pathes (breadcrumbs) of nodes that are roots of checked subtrees
-		 * @method getCheckedPathes
+		 * @method getCheckedPaths
 		 * @param cfg {Object} An object literal with the following properties:
 		 *     <dl>
 		 *     <dt><code>labelAttr</code></dt>
