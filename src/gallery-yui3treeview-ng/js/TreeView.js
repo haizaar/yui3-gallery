@@ -64,15 +64,39 @@
 		CONTENT_TEMPLATE :  "<ul></ul>",
 
 		initializer : function (config) {
+			/**
+			 * Fires when node is expanded / collapsed
+			 * @event nodeToggle
+			 * @param {TreeNode} treenode tree node that is expanding / collapsing.
+			 * Use this event to listed for nodes being clicked. 
+			 */
 			this.publish("nodeToggle", {
 				defaultFn: this._nodeToggleDefaultFn
 			});
+			
+			/**
+			 * Fires when node is collapsed
+			 * @event nodeCollapse
+			 * @param {TreeNode} treenode tree node that is collapsing
+			 */
 			this.publish("nodeCollapse", {
 				defaultFn: this._nodeCollapseDefaultFn
 			});
+			
+			/**
+			 * Fires when node is expanded
+			 * @event nodeExpand
+			 * @param {TreeNode} treenode tree node that is expanding
+			 */
 			this.publish("nodeExpand", {
 				defaultFn: this._nodeExpandDefaultFn
 			});
+			
+			/**
+			 * Fires when node is clicked
+			 * @event nodeClick
+			 * @param {TreeNode} treenode tree node that is being clicked
+			 */
 			this.publish("nodeClick", {
 				defaultFn: this._nodeClickDefaultFn
 			});
@@ -232,7 +256,7 @@
 			 * @attribute defaultChildType
 			 * @type String
 			 * @readOnly
-			 * @default child type definition
+			 * @description default child type definition
 			 */
 			defaultChildType : {  
 				value: "TreeNode",
@@ -241,7 +265,7 @@
 			/**
 			 * @attribute toggleOnLabelClick
 			 * @type Boolean
-			 * @whether to toogle tree state on label clicks with addition to toggle control clicks
+			 * @description whether to toogle tree state on label clicks with addition to toggle control clicks
 			 */
 			toggleOnLabelClick : {
 				value: true,
@@ -250,7 +274,7 @@
 			/**
 			 * @attribute startCollapsed
 			 * @type Boolean
-			 * @wither to render tree nodes expanded or collapsed by default
+			 * @description Whether to render tree nodes expanded or collapsed by default
 			 */
 			startCollapsed : {
 				value: true,
