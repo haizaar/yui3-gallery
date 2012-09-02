@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="http://yuilibrary.com/css/docs-min.css">
     <link rel="stylesheet" href="http://yuilibrary.com/vendor/prettify/prettify-min.css">
     <link rel="shortcut icon" type="image/png" href="http://yuilibrary.com/img/favicon.png">
+	<script src="http://yui.yahooapis.com/3.6.0/build/yui/yui-min.js"></script>
 </head>
 <body class="yui3-skin-sam">
 
@@ -88,7 +89,7 @@ documentation for the <a href="http://yuilibrary.com/yui/docs/yui/index.html">YU
 
 <h2 id="using-treeview">Using TreeView</h2>
 <p> Simplest tree can be built as follows:
-<pre class="code prettyprint">&lt;div id=&quot;tree&quot;&gt;
+<pre class="code prettyprint">&lt;div class=&quot;yui3-skin-sam&quot; id=&quot;tree&quot;&gt;
 &lt;script&gt;
 YUI().use(&quot;gallery-yui3treeview-ng&quot;, function(Y) {
     var treeview = new Y.TreeView({
@@ -368,35 +369,27 @@ Here is <code>TreeView</code>/<code>TreeNode</code> CSS model.
 </ul>
 						</div>
 					</div>
+ 
 
-					<div class="sidebox">
-						<div class="hd">
-							<h2 class="no-toc">Examples</h2>
-						</div>
+					
+						<div class="sidebox">
+							<div class="hd">
+								<h2 class="no-toc">Examples</h2>
+							</div>
 
-						<div class="bd">
-							<ul class="examples">
-								<!--
-								<li data-description="The Local DataSource manages retrieval of in-page data, from JavaScript arrays and objects to DOM elements.">
-									<a href="datasource-local.html">DataSource.Local</a>
-								</li>
-								
-								<li data-description="The Get DataSource, which manages retrieval of data from remote sources via the Get Utility, can be useful for accessing data from cross-domain servers without the need for a proxy.">
-									<a href="datasource-get.html">DataSource.Get</a>
-								</li>
-							
-								<li data-description="The IO DataSource manages retrieval of data from remote sources, via the IO Utility.">
-									<a href="datasource-io.html">DataSource.IO</a>
-								</li>
+							<div class="bd">
+								<ul class="examples">
 									
-								<li data-description="The Function DataSource, which manages retrieval of data from a JavaScript function, provides a highly customizeable mechanism for implementer-defined data retrieval algorithms">
-									<a href="datasource-function.html">DataSource.Function</a>
-								</li>
-								-->
-							</ul>
+										
+											<li data-description="">
+												<a href="example-tree.html">TreeView</a>
+											</li>
+										
+									
+								</ul>
+							</div>
 						</div>
-					</div>
-				</div>
+					
 		</div>
 		<!-- Side bar end -->
     </div>
