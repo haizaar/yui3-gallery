@@ -973,4 +973,4 @@ YUI.add('gallery-yui3treeview-ng', function(Y) {
 	});
 
 
-}, '@VERSION@' ,{skinnable:true, requires:['substitute', 'widget', 'widget-parent', 'widget-child', 'node-focusmanager', 'array-extras']});
+}, '@VERSION@' ,{requires:['substitute', 'widget', 'widget-parent', 'widget-child', 'node-focusmanager', 'array-extras'], skinnable:true});
