@@ -118,7 +118,7 @@
 		load : function(node, request) {
 			this.fire("sendRequest", {
 				treenode : node,
-				reuest: request
+				request: request
 			});
 		},
 		
